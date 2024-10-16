@@ -21,17 +21,17 @@ router.post('/create-card', upload.fields([
       senderCountry,
       receiverName,
       receiverCountry,
-      deliveryDate,
+      deliveryDate,  // Keep this as a string
       message,
       selectedSong
     } = req.body;
     
     const cardId = uuidv4();
     const createdAt = admin.firestore.Timestamp.now();
-    const deliveryTimestamp = admin.firestore.Timestamp.fromDate(new Date(deliveryDate));
 
     let imageUrl, voiceNoteUrl;
 
+    // Handle file uploads for image and voice note
     if (req.files['image']) {
       imageUrl = req.files['image'][0].path;
     }
@@ -40,6 +40,7 @@ router.post('/create-card', upload.fields([
       voiceNoteUrl = req.files['voiceNote'][0].path;
     }
 
+    // Attempt to parse the selected song if present
     let parsedSong;
     try {
       parsedSong = JSON.parse(selectedSong);
@@ -48,6 +49,7 @@ router.post('/create-card', upload.fields([
       parsedSong = null;
     }
 
+    // Prepare the card data to be saved
     const cardData = {
       id: cardId,
       senderName,
@@ -55,18 +57,18 @@ router.post('/create-card', upload.fields([
       receiverName,
       receiverCountry,
       message,
-      selectedSong: selectedSong ? JSON.parse(selectedSong) : null,
+      selectedSong: parsedSong,  // Store parsed song data
       createdAt,
-      deliveryDate: deliveryTimestamp,
+      deliveryDate,  // Store the raw delivery date string to avoid timezone issues
       status: 'Preparing for dispatch',
       imageUrl: imageUrl || null,
       voiceNoteUrl: voiceNoteUrl || null
     };
 
-    if (imageUrl) cardData.imageUrl = imageUrl;
-    if (voiceNoteUrl) cardData.voiceNoteUrl = voiceNoteUrl;
-
+    // Save the card data to Firestore
     await admin.firestore().collection('cards').doc(cardId).set(cardData, { merge: true });
+
+    // Redirect to the tracking page
     res.redirect(`/tracking/${cardId}`);
   } catch (error) {
     console.error('Error creating card:', error);
@@ -77,6 +79,7 @@ router.post('/create-card', upload.fields([
 router.get('/search-song', async (req, res) => {
   const { query } = req.query;
   try {
+    // Call the Last.fm API to search for songs
     const response = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=track.search&track=${query}&api_key=${process.env.LASTFM_API_KEY}&format=json`);
     res.json(response.data);
   } catch (error) {
