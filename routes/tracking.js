@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
       status = 'Preparing for dispatch';
     } else if (progress < 0.5) {
       status = 'Left sender\'s country';
-    } else if (progress < 0.75) {
+    } else if (progress < 0.99) {
       status = 'Arrived in receiver\'s country';
     } else {
       status = 'Delivered';
