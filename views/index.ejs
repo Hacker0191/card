@@ -117,20 +117,6 @@
         form.submit(); 
       }, 7500); 
     });
-
-const form = document.getElementById('greetingForm');
-form.addEventListener('submit', (e) => {
-  const deliveryDateInput = document.getElementById('deliveryDate');
-  
-  // Get the current value from the input
-  const localDate = new Date(deliveryDateInput.value);
-  
-  // Convert the local date to UTC
-  const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
-  
-  // Update the input value to the UTC formatted string (YYYY-MM-DDTHH:mm)
-  deliveryDateInput.value = utcDate.toISOString().slice(0, 16);
-});
   </script>
   <script src="/js/main.js"></script>
 </body>
