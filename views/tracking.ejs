@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greeting Card Website</title>
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #333;
+  text-align: center;
+}
+
+#tracking-info {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 30px;
+}
+
+#tracking-info p {
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+.button {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+#tracking-timeline {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.timeline-item {
+  flex: 1;
+  background-color: #ffffff;
+  margin: 5px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+}
+
+.timeline-item h3 {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.timeline-item.active {
+  background-color: #2dff5b;
+}
+
+@media (max-width: 768px) {
+  #tracking-timeline {
+    flex-direction: column;
+  }
+
+  .timeline-item {
+    margin-bottom: 10px;
+  }
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+  </style>
+</head>
+<body>
+
+  <h1>Card Tracking</h1>
+  <div id="tracking-info">
+    <p>From: <%= trackingData.senderName %> (<%= trackingData.senderCountry %>)</p>
+    <p>To: <%= trackingData.receiverName %> (<%= trackingData.receiverCountry %>)</p>
+    <p>Current Status: <%= trackingData.status %></p>
+    <p>Progress: <%= trackingData.progress %>%</p>
+    
+    <% if (trackingData.status === 'Delivered') { %>
+      <a href="/card/<%= trackingData.id %>" class="button">View Card</a>
+    <% } else { %>
+      <p>Card will be available on: <%= trackingData.deliveryDate.toDate().toLocaleString() %></p>
+    <% } %>
+    
+    <button onclick="shareTracking()">Share Tracking</button>
+  </div>
+  <div id="tracking-timeline">
+    <div class="timeline-item <%= trackingData.status === 'Preparing for dispatch' ? 'active' : '' %>">
+      <h3>Preparing for dispatch</h3>
+    </div>
+    <div class="timeline-item <%= trackingData.status === 'Left sender\'s country' ? 'active' : '' %>">
+      <h3>Left sender's country</h3>
+    </div>
+    <div class="timeline-item <%= trackingData.status === 'Arrived in receiver\'s country' ? 'active' : '' %>">
+      <h3>Arrived in receiver's country</h3>
+  </div>
+  <div class="timeline-item <%= trackingData.status === 'Delivered' ? 'active' : '' %>">
+    <h3>Delivered</h3>
+  </div>
+</div>
+
+<script>
+  function updateTrackingStatus() {
+    location.reload();
+  }
+
+  setInterval(updateTrackingStatus, 10 * 1000);
+
+  function shareTracking() {
+    const trackingUrl = window.location.href;
+    if (navigator.share) {
+      navigator.share({
+        title: 'Track my greeting card',
+        text: 'Follow the journey of my greeting card!',
+        url: trackingUrl,
+      })
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    } else {
+      prompt('Copy this link to share the tracking page:', trackingUrl);
+    }
+  }
+</script>
+
+<script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: #fff;
+  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #000;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #000;
+}
+
+input[type="text"],
+input[type="datetime-local"],
+textarea,
+input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 3px;
+  color: #000;
+}
+
+textarea {
+  resize: vertical;
+  height: 80px;
+}
+
+#songResults {
+  max-height: 120px;
+  overflow-y: scroll;
+  background-color: #fff;
+  border: 1px solid #000;
+  margin-top: 5px;
+  padding: 10px;
+}
+
+.song-item {
+  padding: 8px;
+  cursor: pointer;
+  border-bottom: 1px solid #000;
+}
+
+.song-item:hover {
+  background-color: #f9f9f9;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+
+
+#tracking-timeline {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.timeline-item {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f4f4f4;
+}
+
+.timeline-item.active {
+  background-color: #4CAF50;
+  color: white;
+}
