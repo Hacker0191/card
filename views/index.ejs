@@ -115,7 +115,29 @@
       submitBtn.disabled = true;  
       setTimeout(() => {
         form.submit(); 
-      }, 7500); 
+      }, 5500); 
+    });
+  </script>
+ <script>
+    // Function to convert the input time to UTC format for Firebase
+    document.getElementById('greetingForm').addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevent the default form submission
+
+      // Get the delivery date input
+      const deliveryDateInput = document.getElementById('deliveryDate');
+      const localDateTime = new Date(deliveryDateInput.value);
+
+      // Convert the local time to UTC
+      const utcDateTime = new Date(localDateTime.getTime() - localDateTime.getTimezoneOffset() * 60000);
+
+      // Format the time to the correct ISO string format Firebase expects (YYYY-MM-DDTHH:MM)
+      const utcDateString = utcDateTime.toISOString().slice(0, 16);
+
+      // Set the input value to the UTC time before submitting
+      deliveryDateInput.value = utcDateString;
+
+      // Now allow the form to be submitted
+      this.submit();
     });
   </script>
   <script src="/js/main.js"></script>
