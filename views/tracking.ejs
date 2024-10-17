@@ -1,151 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8">
+  <title>Card Tracking Page </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Greeting Card Website</title>
-  <style>
-    * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
-}
+  <link rel="stylesheet" href="/css/track.css">
 
-body {
-  background-color: #f5f5f5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  padding: 20px;
-}
-
-h1 {
-  margin-bottom: 20px;
-  font-size: 2rem;
-  color: #333;
-  text-align: center;
-}
-
-#tracking-info {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 30px;
-}
-
-#tracking-info p {
-  margin: 10px 0;
-  font-size: 1rem;
-  color: #555;
-}
-
-.button {
-  display: inline-block;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 5px;
-  text-decoration: none;
-  text-align: center;
-  margin-top: 10px;
-}
-
-.button:hover {
-  background-color: #0056b3;
-}
-
-#tracking-timeline {
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.timeline-item {
-  flex: 1;
-  background-color: #ffffff;
-  margin: 5px;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  position: relative;
-}
-
-.timeline-item h3 {
-  font-size: 1.2rem;
-  color: #333;
-}
-
-.timeline-item.active {
-  background-color: #2dff5b;
-}
-
-@media (max-width: 768px) {
-  #tracking-timeline {
-    flex-direction: column;
-  }
-
-  .timeline-item {
-    margin-bottom: 10px;
-  }
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-  </style>
 </head>
 <body>
 
-  <h1>Card Tracking</h1>
-  <div id="tracking-info">
-    <p>From: <%= trackingData.senderName %> (<%= trackingData.senderCountry %>)</p>
-    <p>To: <%= trackingData.receiverName %> (<%= trackingData.receiverCountry %>)</p>
-    <p>Current Status: <%= trackingData.status %></p>
-    <p>Progress: <%= trackingData.progress %>%</p>
-    
-    <% if (trackingData.status === 'Delivered') { %>
-      <a href="/card/<%= trackingData.id %>" class="button">View Card</a>
-    <% } else { %>
-      <p>Card will be available on: <%= trackingData.deliveryDate.toDate().toLocaleString() %></p>
-    <% } %>
-    
-    <button onclick="shareTracking()">Share Tracking</button>
-  </div>
-  <div id="tracking-timeline">
-    <div class="timeline-item <%= trackingData.status === 'Preparing for dispatch' ? 'active' : '' %>">
-      <h3>Preparing for dispatch</h3>
+<!-- Card Tracking Page -->
+<div class="container">
+  <div class="iphone">
+    <div class="header">
+      <div class="order-summary">
+        <div class="order-status">Arriving date</div>
+        <div class="order-date">
+          <%= trackingData.deliveryDate.toDate().toLocaleString() %>
+        </div>
+      </div>
+      <div class="action-btn">
+        <div class="back-btn2"><i class="fa-solid fa-share-nodes" onclick="shareTracking()"></i></div>
+      </div>
+      <div class="action-btn">
+        <div class="back-btn"><i class="fa-solid fa-arrow-left"></i></div>
+      </div>
     </div>
-    <div class="timeline-item <%= trackingData.status === 'Left sender\'s country' ? 'active' : '' %>">
-      <h3>Left sender's country</h3>
+    <div class="hero-img-container">
+      <div class="triangle1"></div>
+      <div class="arc"></div>
+      <div class="pattern"></div>
+      <img src="https://i.ibb.co/qWH1nD6/undraw-Order-delivered-re-v4ab.png" class="hero-img">
     </div>
-    <div class="timeline-item <%= trackingData.status === 'Arrived in receiver\'s country' ? 'active' : '' %>">
-      <h3>Arrived in receiver's country</h3>
-  </div>
-  <div class="timeline-item <%= trackingData.status === 'Delivered' ? 'active' : '' %>">
-    <h3>Delivered</h3>
-  </div>
-</div>
+  
+    <div class="order-status-container">
+      <div class="status-item first <%= trackingData.status === 'Preparing for dispatch' ? 'active' : '' %>">
+        <div class="status-circle"></div>
+        <div class="status-text <%= trackingData.status === 'Preparing for dispatch' || trackingData.status === 'Left sender\'s country' || trackingData.status === 'Arrived in receiver\'s country' || trackingData.status === 'Delivered' ? 'green' : '' %>">
+          Preparing for dispatch
+        </div>
+      </div>
+      
+      <div class="status-item second <%= trackingData.status === 'Left sender\'s country' ? 'active' : '' %>">
+        <div class="status-circle"></div>
+        <div class="status-text <%= trackingData.status === 'Left sender\'s country' || trackingData.status === 'Arrived in receiver\'s country' || trackingData.status === 'Delivered' ? 'green' : '' %>">
+          Left sender's country
+        </div>
+      </div>
+      
+      <div class="status-item third <%= trackingData.status === 'Arrived in receiver\'s country' ? 'active' : '' %>">
+        <div class="status-circle"></div>
+        <div class="status-text <%= trackingData.status === 'Arrived in receiver\'s country' || trackingData.status === 'Delivered' ? 'green' : '' %>">
+          Arrived in receiver's country
+        </div>
+      </div>
+      
+      <div class="status-item <%= trackingData.status === 'Delivered' ? 'active' : '' %>">
+        <div class="status-circle"></div>
+        <div class="status-text <%= trackingData.status === 'Delivered' ? 'green' : '' %>">
+          Delivered
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+      
+    <div class="order-details-container" style="margin-bottom: -20px;">
+      <div class="odc-header">
+      <div class="cta-text">See your card details</div>
+      <div class="cta-button-container">
+        <button class="cta-button">View</button>
+      </div>
+      </div>
+      <div class="odc-wrapper">
+      <div class="odc-header-line">
+        Your card details
+      </div>
+      <div class="odc-header-details">
+        Your card id: <%= trackingData.id %>
+      </div>
+  
+      
+          <a href="/card/<%= trackingData.id %>" class="button"><div class="cancellation">
+            View Card
+          </div></a>
+    
+      
+    
+          <div class="shipping-address">
+            Progress: <%= trackingData.progress %>%
+          </div>
+     
+      <div class="shipping-address">
+        Current Status: <%= trackingData.status %>
+      </div>
 
+
+      <div class="shipping-desc">From:</div>
+      
+      <div class="shipping-address">
+        <%= trackingData.senderName %> (<%= trackingData.senderCountry %>)
+      </div>
+
+      <div class="shipping-desc">To:</div>
+     
+      <div class="shipping-address">
+        <%= trackingData.receiverName %> (<%= trackingData.receiverCountry %>)
+      </div>
+
+      
+      </div>
+    </div>
+  </div>
+  
+
+</div>
+</div>
+<!-- partial -->
 <script>
   function updateTrackingStatus() {
     location.reload();
@@ -168,7 +141,13 @@ button:hover {
     }
   }
 </script>
-
-<script src="/js/main.js"></script>
+  <script src='https://animejs.com/lib/anime.min.js'></script><script src="/js/track.js"></script>
+  <script>
+    function updateTrackingStatus() {
+      location.reload();
+    }
+    setInterval(updateTrackingStatus, 20 * 1000);
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </body>
 </html>
