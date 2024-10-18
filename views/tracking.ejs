@@ -16,7 +16,7 @@
       <div class="order-summary">
         <div class="order-status">Arriving date</div>
         <div class="order-date">
-          <span id="localDeliveryDate"></span>
+          <%= trackingData.deliveryDate %>
         </div>
       </div>
       <div class="action-btn">
@@ -119,13 +119,6 @@
 </div>
 </div>
 <!-- partial -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-      const utcDate = new Date('<%= card.deliveryDate.toDate().toISOString() %>');
-      const localDate = new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000);
-      document.getElementById('localDeliveryDate').textContent = localDate.toLocaleString();
-  });
-</script>
 <script>
   function updateTrackingStatus() {
     location.reload();
