@@ -5,9 +5,8 @@ const addRemoveClass = () => {
     orderButton.classList.add("animate");
     setTimeout(() => {
       orderButton.classList.remove("animate");
-    }, 10000);
+    }, 100000);
   }
 };
 
 orderButton.addEventListener("click", addRemoveClass);
-

@@ -115,32 +115,9 @@
       submitBtn.disabled = true;  
       setTimeout(() => {
         form.submit(); 
-      }, 5500); 
-    });
-  </script>
-  <script>
-    document.getElementById('greetingForm').addEventListener('submit', function (e) {
-      e.preventDefault(); // Prevent default form submission
-
-      // Get the delivery date input
-      const deliveryDateInput = document.getElementById('deliveryDate');
-      const localDateTime = new Date(deliveryDateInput.value);
-
-      // Manually subtract 5 hours and 30 minutes (IST offset from UTC)
-      const istOffset = 5 * 60 + 30; // 5 hours 30 minutes in minutes
-      const utcDateTime = new Date(localDateTime.getTime() - istOffset * 60000);
-
-      // Convert it to the format required by Firebase
-      const utcDateString = utcDateTime.toISOString().slice(0, 16); // Keep YYYY-MM-DDTHH:MM format
-
-      // Set the deliveryDate input value to the corrected UTC time
-      deliveryDateInput.value = utcDateString;
-
-      // Now submit the form
-      this.submit();
+      }, 7500); 
     });
   </script>
   <script src="/js/main.js"></script>
-<script src="/js/track.js"></script>
 </body>
 </html>
