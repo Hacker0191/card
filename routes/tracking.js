@@ -45,17 +45,20 @@ router.get('/:id', async (req, res) => {
     // Update the status in Firebase
     await admin.firestore().collection('cards').doc(id).update({ status });
 
-    res.render('tracking', { 
-      trackingData: {
-        ...cardData,
-        status,
-        progress: Math.round(progress * 100)
-      }
-    });
-  } catch (error) {
-    console.error('Error fetching tracking data:', error);
-    res.status(500).send('An error occurred while fetching tracking data');
-  }
+  // Render the tracking template with the card data, status, and progress
+  res.render('tracking', {
+    trackingData: {
+      ...cardData,
+      status,
+      progress: Math.round(progress * 100),
+    },
+    cardTemplate,
+    cardId,
+  });
+} catch (error) {
+  console.error('Error fetching card for tracking:', error);
+  res.status(500).send('An error occurred while fetching the card tracking information');
+}
 });
 
 module.exports = router;
