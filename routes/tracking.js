@@ -29,6 +29,19 @@ router.get('/:id', async (req, res) => {
       status = 'Delivered';
     }
 
+    // Redirect to the appropriate card page based on the selected theme
+    let cardTemplate;
+    switch (theme) {
+      case 'christmas':
+        cardTemplate = '2';
+        break;
+      case 'newyear':
+        cardTemplate = '3';
+        break;
+      default:
+        cardTemplate = '1';
+    }
+
     // Update the status in Firebase
     await admin.firestore().collection('cards').doc(id).update({ status });
 
