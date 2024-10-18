@@ -29,7 +29,10 @@ router.post('/create-card', upload.fields([
 
     const cardId = uuidv4();
     const createdAt = admin.firestore.Timestamp.now();
-    const deliveryTimestamp = admin.firestore.Timestamp.fromDate(new Date(deliveryDate));
+    
+    // Convert deliveryDate to UTC
+    const deliveryDateUTC = new Date(deliveryDate);
+    const deliveryTimestamp = admin.firestore.Timestamp.fromDate(deliveryDateUTC);
 
     let imageUrl, voiceNoteUrl;
 
