@@ -23,9 +23,10 @@ router.post('/create-card', upload.fields([
       receiverCountry,
       deliveryDate,
       message,
-      selectedSong
+      selectedSong,
+      theme
     } = req.body;
-    
+
     const cardId = uuidv4();
     const createdAt = admin.firestore.Timestamp.now();
     const deliveryTimestamp = admin.firestore.Timestamp.fromDate(new Date(deliveryDate));
@@ -35,7 +36,7 @@ router.post('/create-card', upload.fields([
     if (req.files['image']) {
       imageUrl = req.files['image'][0].path;
     }
-  
+
     if (req.files['voiceNote']) {
       voiceNoteUrl = req.files['voiceNote'][0].path;
     }
@@ -55,19 +56,31 @@ router.post('/create-card', upload.fields([
       receiverName,
       receiverCountry,
       message,
-      selectedSong: selectedSong ? JSON.parse(selectedSong) : null,
+      selectedSong: parsedSong,
       createdAt,
       deliveryDate: deliveryTimestamp,
       status: 'Preparing for dispatch',
       imageUrl: imageUrl || null,
-      voiceNoteUrl: voiceNoteUrl || null
+      voiceNoteUrl: voiceNoteUrl || null,
+      theme
     };
 
-    if (imageUrl) cardData.imageUrl = imageUrl;
-    if (voiceNoteUrl) cardData.voiceNoteUrl = voiceNoteUrl;
-
     await admin.firestore().collection('cards').doc(cardId).set(cardData, { merge: true });
-    res.redirect(`/tracking/${cardId}`);
+
+    // Redirect to the appropriate card page based on the selected theme
+    let cardTemplate;
+    switch (theme) {
+      case 'christmas':
+        cardTemplate = '2';
+        break;
+      case 'newyear':
+        cardTemplate = '3';
+        break;
+      default:
+        cardTemplate = '1';
+    }
+
+    res.redirect(`/cards/${cardTemplate}/${cardId}`);
   } catch (error) {
     console.error('Error creating card:', error);
     res.status(500).send(`An error occurred while creating the card: ${error.message}`);

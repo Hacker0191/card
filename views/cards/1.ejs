@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greeting Card Website</title>
+  <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0; /* Light gray background for body */
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+#card-content {
+  background-image: url('/img/OIP.jpeg'); /* Background image for the card */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 30px;
+  width: 100%; /* Full width on mobile */
+  max-width: 400px; /* Limit the maximum width for desktop view */
+  overflow: hidden; /* Prevent overflow */
+}
+
+.from, .to {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.message-scroll {
+  max-height: 200px; /* Set max height for scrollable area */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px;
+  border: 1px solid #ccc; /* Add border for visual separation */
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.9); /* Light background for the message */
+}
+
+.message {
+  font-size: 1rem;
+  line-height: 1.5; /* Increase line height for readability */
+}
+
+/* Attachments styling */
+.attachments {
+  margin-top: 15px; /* Spacing between attachments */
+  display: flex;
+  flex-direction: column; /* Stack attachments vertically */
+}
+
+.attachment {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8); /* Light background for attachments */
+  border: 1px solid #ddd; /* Light border for definition */
+  border-radius: 10px; /* Round edges for attachments */
+  padding: 10px;
+  margin-top: 5px; /* Spacing between each attachment */
+  transition: transform 0.2s; /* Animation on hover */
+}
+
+.attachment:hover {
+  transform: scale(1.02); /* Slightly scale up on hover */
+}
+
+.card-image {
+  max-width: 100%;
+  border-radius: 10px; /* Round edges for the image */
+}
+
+.sender-name {
+  font-weight: bold;
+  margin-top: 20px; /* Spacing above sender name */
+  text-align: right; /* Align sender name to the right */
+}
+
+/* Media query for mobile-like experience on desktop */
+@media (min-width: 768px) {
+  #card-content {
+    width: 100%; /* Make it full-width in mobile view */
+    max-width: 400px; /* Set max width for mobile-like appearance */
+  }
+
+  h1 {
+    font-size: 1.5rem; /* Adjust heading size */
+  }
+}
+
+@media (max-width: 768px) {
+  #card-content {
+    height: 100vh; /* Full screen height for mobile */
+    overflow-y: auto; /* Enable scrolling if content overflows */
+  }
+}
+
+
+  </style>
+</head>
+<body>
+
+ 
+  <div id="card-content">
+    <p class="from">From: <%= card.senderName %> (<%= card.senderCountry %>)</p>
+    <p class="to">To: <%= card.receiverName %> (<%= card.receiverCountry %>)</p>
+    <div class="message-scroll">
+      <p class="message">Message: <%= card.message %></p>
+    </div>
+
+    <% if (card.imageUrl) { %>
+      <div class="attachment">
+        <img src="<%= card.imageUrl %>" alt="Card Image" class="card-image">
+      </div>
+    <% } %>
+    <% if (card.voiceNoteUrl) { %>
+      <div class="attachment">
+        <audio controls>
+          <source src="<%= card.voiceNoteUrl %>" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    <% } %>
+    <% if (card.selectedSong && card.selectedSong.name && card.selectedSong.artist) { %>
+      <div class="attachment">
+        <p>Background Song: <%= card.selectedSong.name %> - <%= card.selectedSong.artist %></p>
+        <audio id="background-music" loop>
+          <source src="<%= card.selectedSong.url %>" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    <% } %>  
+   
+  </div>
+
+  <script>
+    const audio = document.getElementById('background-music');
+
+    // Add a click event listener to the document to play the audio when the user interacts with the page
+    document.addEventListener('click', () => {
+      if (audio) {
+        audio.play().catch(error => {
+          console.log("Audio play failed: ", error);
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

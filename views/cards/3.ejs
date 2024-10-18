@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>New Year Greeting Card</title>
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=no; target-densityDpi=device-dpi" />
+  <link rel="stylesheet" href="/css/1.css">
+  <style>
+    @import url("https://fonts.googleapis.com/css?family=Mirza&amp;subset=latin-ext");
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #928A97;
+  background-image: url("https://images.pexels.com/photos/257909/pexels-photo-257909.jpeg?fit=crop&w=1920&h=1280");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+canvas{
+  background:#000;
+  opacity: 60%;
+}
+
+.card {
+  perspective: 1500px;
+  position: absolute;
+  left: calc(50% - 175px);
+  top: calc(50% - 250px);
+  transition-property: transform;
+  transition-duration: 1s;
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition-delay: initial;
+  transform: rotate(-10deg) translate(0, 0);
+  -webkit-animation: cardIn 1s alternate cubic-bezier(0.87, -0.41, 0.19, 1.44);
+  animation: cardIn 1s alternate cubic-bezier(0.87, -0.41, 0.19, 1.44);
+}
+@media (max-width: 767px) {
+  .card {
+    left: calc(50% - 115px);
+    top: calc(50% - 164.5px);
+  }
+}
+@media (max-width: 479px) {
+  .card {
+    left: calc(50% - 75px);
+    top: calc(50% - 107px);
+  }
+}
+.card:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0 50px #000;
+  transition: all 0.5s ease-in-out;
+}
+.card.is-opened {
+  transform: rotate(0deg) translate(175px, 0);
+}
+@media (max-width: 767px) {
+  .card.is-opened {
+    transform: rotate(0deg) translate(115px, 0);
+  }
+}
+@media (max-width: 479px) {
+  .card.is-opened {
+    transform: rotate(0deg) translate(75px, 0);
+  }
+}
+.card.is-opened .cart-page-front {
+  transform: rotateY(-180deg);
+}
+
+@-webkit-keyframes cardIn {
+  0% {
+    opacity: 0;
+    transform: rotate(-10deg) translate(0, -100%);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-10deg) translate(0, 0);
+  }
+}
+
+@keyframes cardIn {
+  0% {
+    opacity: 0;
+    transform: rotate(-10deg) translate(0, -100%);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-10deg) translate(0, 0);
+  }
+}
+.card,
+.card-page {
+  width: 350px;
+  height: 500px;
+}
+@media (max-width: 767px) {
+  .card,
+.card-page {
+    width: 230px;
+    height: 329px;
+  }
+}
+@media (max-width: 479px) {
+  .card,
+.card-page {
+    width: 150px;
+    height: 214px;
+  }
+}
+
+.scrollable-content {
+  height: 150px; /* Set a fixed height */
+  overflow-y: scroll; /* Enable vertical scrolling */
+  padding: 10px; /* Optional: Add some padding for better appearance */
+}
+
+
+
+
+.card-page {
+  transition: transform 1s ease-in-out;
+  cursor: pointer;
+  position: absolute;
+  outline: 1px solid transparent;
+}
+
+
+.cart-page-front {
+  transform-origin: 0 50% 0;
+  transform-style: preserve-3d;
+  transform: rotateY(-20deg);
+  z-index: 2;
+}
+
+.cart-page-outside,
+.cart-page-inside {
+  position: absolute;
+  -webkit-backface-visibility: hidden;
+}
+
+.cart-page-outside {
+  border: 10px solid #fbfbfb;
+  background: #c72320 url("https://www.dropbox.com/s/xsgg2exs2oparkm/front-bg.png?raw=1") no-repeat center;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 767px) {
+  .cart-page-outside {
+    border: 5px solid #fbfbfb;
+  }
+}
+
+.cart-page-inside,
+.cart-page-bottom {
+  background-color: #d4d1d0;
+  background-image: url("https://www.dropbox.com/s/8hw7guch8d151kg/pattern.png?raw=1");
+  border: 20px solid #d4d1d0;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -moz-flex;
+  display: flex;
+  box-pack: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+  justify-content: center;
+  -ms-flex-pack: center;
+  box-align: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  -o-align-items: center;
+  align-items: center;
+  -ms-flex-align: center;
+  text-align: center;
+}
+@media (max-width: 767px) {
+  .cart-page-inside,
+.cart-page-bottom {
+    border: 10px solid #d4d1d0;
+  }
+}
+
+.cart-page-inside {
+  transform: rotateY(-180deg);
+  border-right: none !important;
+  background-position: 0px 80px;
+}
+@media (max-width: 767px) {
+  .cart-page-inside {
+    background-position: 0px 30px;
+  }
+}
+@media (max-width: 479px) {
+  .cart-page-inside {
+    background-position: 0px 30px;
+  }
+}
+
+.cart-page-bottom {
+  z-index: 1;
+  border-left: none !important;
+  background-position: -22px 80px;
+}
+@media (max-width: 767px) {
+  .cart-page-bottom {
+    background-position: 85px 30px;
+  }
+}
+@media (max-width: 479px) {
+  .cart-page-bottom {
+    background-position: 0px 30px;
+  }
+}
+
+
+.merry-christmas {
+  transform: rotate(-20deg);
+}
+.merry-christmas svg {
+  width: 350px;
+  height: auto;
+}
+@media (max-width: 767px) {
+  .merry-christmas svg {
+    width: 200px;
+  }
+}
+@media (max-width: 479px) {
+  .merry-christmas svg {
+    width: 150px;
+  }
+}
+
+.click-icon {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 20px;
+  -webkit-animation: iconAnimation 1s infinite alternate ease-in-out;
+  animation: iconAnimation 1s infinite alternate ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+}
+.click-icon svg {
+  width: 96px;
+  height: 96px;
+}
+@media (max-width: 767px) {
+  .click-icon svg {
+    width: 72px;
+    height: 72px;
+  }
+}
+@media (max-width: 479px) {
+  .click-icon svg {
+    width: 48px;
+    height: 48px;
+  }
+}
+.click-icon.is-hidden {
+  opacity: 0;
+}
+
+@-webkit-keyframes iconAnimation {
+  0% {
+    transform: translate(-50%, 0);
+  }
+  100% {
+    transform: translate(-50%, 10px);
+  }
+}
+
+@keyframes iconAnimation {
+  0% {
+    transform: translate(-50%, 0);
+  }
+  100% {
+    transform: translate(-50%, 10px);
+  }
+}
+p {
+  font-family: "Mirza", Verdana, Arial, serif;
+  font-size: 16px;
+  line-height: 1.2em;
+  padding-left: 10px;
+}
+
+img {
+  height: 100%;
+  width: 400px; 
+}
+
+/* Media queries for responsive adjustments */
+@media (max-width: 767px) {
+  p {
+    font-size: 18px; 
+  }
+  img {
+    height: 100%;
+    width: 300px; 
+  }
+}
+
+@media (max-width: 479px) {
+  p {
+    font-size: 14px; 
+  }
+  img {
+    height: 100%;
+    width: 200px !important; 
+  }
+}
+
+  </style>
+
+</head>
+<body>
+
+  <!-- New Year Theme -->
+   
+  <div>
+    <canvas id="canvas"></canvas>
+      </div>
+
+<!-- partial:index.partial.html -->
+<div class="card">
+    <div class="card-page cart-page-front">
+        <div class="card-page cart-page-outside"></div>
+        <div class="card-page cart-page-inside">
+          <span class="merry-christmas">
+<img src="/public/img/new-year.png" alt="">
+          </span>
+        </div>
+    </div>
+    <div class="card-page cart-page-bottom">
+      <div class="scrollable-content">
+        <p style="text-align: left;">From: <%= card.senderName %> (<%= card.senderCountry %>)</p>
+    <p style="text-align: left;">To: <%= card.receiverName %> (<%= card.receiverCountry %>)</p>
+
+          <p style="text-align: left;">Message: <%= card.message %></p>
+  
+    
+        <% if (card.imageUrl) { %>
+          <div class="attachment">
+            <img src="<%= card.imageUrl %>" alt="Card Image" class="card-image">
+          </div>
+        <% } %>
+        <% if (card.voiceNoteUrl) { %>
+          <div class="attachment">
+            <audio controls>
+              <source src="<%= card.voiceNoteUrl %>" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        <% } %>
+        <% if (card.selectedSong && card.selectedSong.name && card.selectedSong.artist) { %>
+          <div class="attachment">
+            <p>Background Song: <%= card.selectedSong.name %> - <%= card.selectedSong.artist %></p>
+            <audio id="background-music" loop>
+              <source src="<%= card.selectedSong.url %>" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        <% } %>  
+      </div>      
+    </div>
+  </div>
+
+  <span class="click-icon">
+    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M31.6 17.7V26c0 1.9-.7 3.7-2 5.1v.9c0 1.6-1.3 3-3 3h-8.4c-1.6 0-3-1.3-3-3 0-.6.5-1 1-1s1 .4 1 1c0 .5.4 1 1 1h8.4c.5 0 1-.4 1-1v-1.2-.3-.1c0-.1.1-.2.2-.3 1.1-1.1 1.7-2.5 1.7-4v-8.3c0-.3-.1-.5-.3-.7-.1-.1-.5-.4-1-.3-.4.1-.8.6-.8 1.1v2.4c0 .6-.5 1-1 1s-1-.4-1-1v-5.5c0-.3-.1-.5-.3-.7s-.4-.3-.7-.3c-.5 0-1 .5-1 1v5.5c0 .6-.5 1-1 1s-1-.4-1-1v-8.5c0-.3-.1-.5-.3-.7s-.4-.3-.7-.3c-.5 0-1 .5-1 1v8.5c0 .6-.5 1-1 1s-1-.4-1-1V7.7c0-.3-.1-.5-.3-.7-.1-.1-.5-.4-1-.3-.4.1-.8.6-.8 1.1V20c0 .4-.2.8-.6.9-.4.2-.8.1-1.1-.2L11 18.1c-.6-.6-1.6-.6-2.2.1-.5.6-.4 1.5.2 2.1l7 7c.4.4.4 1 0 1.4-.2.2-.5.3-.7.3-.3 0-.5-.1-.7-.3l-7-7.1c-1.3-1.3-1.5-3.5-.3-4.8C8 16 9 15.5 10 15.5c.9 0 1.8.4 2.5 1l.9.9V7.9c0-1.4.9-2.7 2.3-3 1-.3 2.1 0 2.8.8.6.6.9 1.3.9 2.1V9c.3-.1.7-.2 1-.2.8 0 1.5.3 2.1.9s.9 1.3.9 2.1v.2c.3-.1.7-.2 1-.2.8 0 1.5.3 2.1.9s.9 1.3.9 2.1v.2c.1 0 .2-.1.3-.1 1-.3 2.1 0 2.8.8.8.5 1.1 1.3 1.1 2z"/></svg>
+  </span>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+  <script>$(document).ready(function() {
+
+    var $clickMe = $('.click-icon'),
+        $card = $('.card');
+    
+    $card.on('click', function() {
+  
+          $(this).toggleClass('is-opened');
+      $clickMe.toggleClass('is-hidden');
+  
+      });
+  
+  });</script>
+
+  <script>
+    window.addEventListener("resize", resizeCanvas, false);
+        window.addEventListener("DOMContentLoaded", onLoad, false);
+        
+        window.requestAnimationFrame = 
+            window.requestAnimationFrame       || 
+            window.webkitRequestAnimationFrame || 
+            window.mozRequestAnimationFrame    || 
+            window.oRequestAnimationFrame      || 
+            window.msRequestAnimationFrame     || 
+            function (callback) {
+                window.setTimeout(callback, 1000/60);
+            };
+        
+        var canvas, ctx, w, h, particles = [], probability = 0.04,
+            xPoint, yPoint;
+        
+        
+        
+        
+        
+        function onLoad() {
+            canvas = document.getElementById("canvas");
+            ctx = canvas.getContext("2d");
+            resizeCanvas();
+            
+            window.requestAnimationFrame(updateWorld);
+        } 
+        
+        function resizeCanvas() {
+            if (!!canvas) {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+        } 
+        
+        function updateWorld() {
+            update();
+            paint();
+            window.requestAnimationFrame(updateWorld);
+        } 
+        
+        function update() {
+            if (particles.length < 500 && Math.random() < probability) {
+                createFirework();
+            }
+            var alive = [];
+            for (var i=0; i<particles.length; i++) {
+                if (particles[i].move()) {
+                    alive.push(particles[i]);
+                }
+            }
+            particles = alive;
+        } 
+        
+        function paint() {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = "rgba(0,0,0,0.2)";
+            ctx.fillRect(0, 0, w, h);
+            ctx.globalCompositeOperation = 'lighter';
+            for (var i=0; i<particles.length; i++) {
+                particles[i].draw(ctx);
+            }
+        } 
+        
+        function createFirework() {
+            xPoint = Math.random()*(w-200)+100;
+            yPoint = Math.random()*(h-200)+100;
+            var nFire = Math.random()*50+100;
+            var c = "rgb("+(~~(Math.random()*200+55))+","
+                 +(~~(Math.random()*200+55))+","+(~~(Math.random()*200+55))+")";
+            for (var i=0; i<nFire; i++) {
+                var particle = new Particle();
+                particle.color = c;
+                var vy = Math.sqrt(25-particle.vx*particle.vx);
+                if (Math.abs(particle.vy) > vy) {
+                    particle.vy = particle.vy>0 ? vy: -vy;
+                }
+                particles.push(particle);
+            }
+        } 
+        
+        function Particle() {
+            this.w = this.h = Math.random()*4+1;
+            
+            this.x = xPoint-this.w/2;
+            this.y = yPoint-this.h/2;
+            
+            this.vx = (Math.random()-0.5)*10;
+            this.vy = (Math.random()-0.5)*10;
+            
+            this.alpha = Math.random()*.5+.5;
+            
+            this.color;
+        } 
+        
+        Particle.prototype = {
+            gravity: 0.05,
+            move: function () {
+                this.x += this.vx;
+                this.vy += this.gravity;
+                this.y += this.vy;
+                this.alpha -= 0.01;
+                if (this.x <= -this.w || this.x >= screen.width ||
+                    this.y >= screen.height ||
+                    this.alpha <= 0) {
+                        return false;
+                }
+                return true;
+            },
+            draw: function (c) {
+                c.save();
+                c.beginPath();
+                
+                c.translate(this.x+this.w/2, this.y+this.h/2);
+                c.arc(0, 0, this.w, 0, Math.PI*2);
+                c.fillStyle = this.color;
+                c.globalAlpha = this.alpha;
+                
+                c.closePath();
+                c.fill();
+                c.restore();
+            }
+        } 
+  </script>
+ <script>
+  const audio = document.getElementById('background-music');
+
+  // Add a click event listener to the document to play the audio when the user interacts with the page
+  document.addEventListener('click', () => {
+    if (audio) {
+      audio.play().catch(error => {
+        console.log("Audio play failed: ", error);
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
