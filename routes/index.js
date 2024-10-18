@@ -83,7 +83,8 @@ router.post('/create-card', upload.fields([
         cardTemplate = '1';
     }
 
-    res.redirect(`/cards/${cardTemplate}/${cardId}`);
+    // Redirect to the tracking page instead of the card page
+    res.redirect(`/tracking/${cardId}`);
   } catch (error) {
     console.error('Error creating card:', error);
     res.status(500).send(`An error occurred while creating the card: ${error.message}`);
