@@ -127,18 +127,6 @@
       }, 7500); 
     });
   </script>
-  <script>// Add this to your client-side JavaScript file
-    document.addEventListener('DOMContentLoaded', () => {
-      const deliveryDateInput = document.getElementById('deliveryDate');
-      
-      if (deliveryDateInput) {
-        deliveryDateInput.addEventListener('change', (e) => {
-          const localDate = new Date(e.target.value);
-          const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
-          e.target.value = utcDate.toISOString().slice(0, 16);
-        });
-      }
-    });</script>
   <script src="/js/main.js"></script>
 </body>
 </html>

@@ -16,7 +16,7 @@
       <div class="order-summary">
         <div class="order-status">Arriving date</div>
         <div class="order-date">
-          <%= trackingData.deliveryDate %>
+        <%= new Date(trackingData.deliveryDate.seconds * 1000).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
         </div>
       </div>
       <div class="action-btn">
@@ -83,7 +83,7 @@
       </div>
   
       
-          <a href="<%= `/cards/${cardTemplate}/${cardId}` %>" class="button">
+          <a href="/card/<%= trackingData.id %>" class="button">
     <div class="cancellation">
         View Card
           </div></a>
@@ -120,8 +120,15 @@
 </div>
 </div>
 <!-- partial -->
-<script>
-  function updateTrackingStatus() {
+
+  <script src='https://animejs.com/lib/anime.min.js'></script><script src="/js/track.js"></script>
+  <script>
+    function updateTrackingStatus() {
+      location.reload();
+    }
+    setInterval(updateTrackingStatus, 30 * 1000);
+
+    function updateTrackingStatus() {
     location.reload();
   }
 
@@ -141,13 +148,6 @@
       prompt('Copy this link to share the tracking page:', trackingUrl);
     }
   }
-</script>
-  <script src='https://animejs.com/lib/anime.min.js'></script><script src="/js/track.js"></script>
-  <script>
-    function updateTrackingStatus() {
-      location.reload();
-    }
-    setInterval(updateTrackingStatus, 20 * 1000);
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </body>

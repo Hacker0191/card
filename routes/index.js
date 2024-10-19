@@ -29,10 +29,7 @@ router.post('/create-card', upload.fields([
 
     const cardId = uuidv4();
     const createdAt = admin.firestore.Timestamp.now();
-    
-    // Convert deliveryDate to UTC
-    const deliveryDateUTC = new Date(deliveryDate);
-    const deliveryTimestamp = admin.firestore.Timestamp.fromDate(deliveryDateUTC);
+    const deliveryTimestamp = admin.firestore.Timestamp.fromDate(new Date(deliveryDate));
 
     let imageUrl, voiceNoteUrl;
 
@@ -70,26 +67,61 @@ router.post('/create-card', upload.fields([
 
     await admin.firestore().collection('cards').doc(cardId).set(cardData, { merge: true });
 
-    // Redirect to the appropriate card page based on the selected theme
-    let cardTemplate;
-    switch (theme) {
-      case 'christmas':
-        cardTemplate = '2';
-        break;
-      case 'newyear':
-        cardTemplate = '3';
-        break;
-      default:
-        cardTemplate = '1';
-    }
-
-    // Redirect to the tracking page instead of the card page
+    // Redirect to the tracking page
     res.redirect(`/tracking/${cardId}`);
   } catch (error) {
     console.error('Error creating card:', error);
     res.status(500).send(`An error occurred while creating the card: ${error.message}`);
   }
 });
+
+router.get('/tracking/:cardId', async (req, res) => {
+  try {
+    const cardId = req.params.cardId;
+    const cardDoc = await admin.firestore().collection('cards').doc(cardId).get();
+    
+    if (!cardDoc.exists) {
+      return res.status(404).send('Card not found');
+    }
+
+    const trackingData = cardDoc.data();
+    res.render('tracking', { trackingData }); // Changed cardData to trackingData
+  } catch (error) {
+    console.error('Error fetching card data:', error);
+    res.status(500).send(`An error occurred while fetching the card data: ${error.message}`);
+  }
+});
+
+router.get('/card/:cardId', async (req, res) => {
+  try {
+    const cardId = req.params.cardId;
+    const cardDoc = await admin.firestore().collection('cards').doc(cardId).get();
+    
+    if (!cardDoc.exists) {
+      return res.status(404).send('Card not found');
+    }
+
+    const cardData = cardDoc.data();
+    let template;
+    switch (cardData.theme) {
+      case 'christmas':
+        template = '2';
+        break;
+      case 'newyear':
+        template = '3';
+        break;
+      default:
+        template = '1';
+    }
+
+    res.render(`cards/${template}`, { cardData });
+  } catch (error) {
+    console.error('Error fetching card data:', error);
+    res.status(500).send(`An error occurred while fetching the card data: ${error.message}`);
+  }
+});
+
+
 
 router.get('/search-song', async (req, res) => {
   const { query } = req.query;
