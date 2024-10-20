@@ -109,3 +109,89 @@ textarea {
   background-color: #4CAF50;
   color: white;
 }
+
+
+.select-wrapper {
+  position: relative;
+  width: 250px;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.select-wrapper::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,.25);
+}
+
+option {
+  padding: 10px;
+}
+
+optgroup {
+  font-weight: bold;
+  color: #555;
+}
+
+select::-webkit-scrollbar {
+  width: 10px;
+}
+
+select::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+select::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+select::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+
+/* Styling for the results container */
+.autocomplete-results {
+  background-color: #fff;
+  max-height: 200px; /* Limit the height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  position: absolute;
+  width: calc(100% - 22px); /* Adjust for padding and border */
+  z-index: 1000;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for each suggestion item */
+.autocomplete-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.autocomplete-item:hover {
+  background-color: #f0f0f0; /* Highlight on hover */
+}
+
+
+

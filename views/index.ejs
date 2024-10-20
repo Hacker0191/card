@@ -43,11 +43,30 @@
 
       <div class="form-group">
         <label for="theme">Select Theme:</label>
-        <select id="theme" name="theme" required>
-            <option value="default">Default</option>
-            <option value="christmas">Christmas</option>
-            <option value="newyear">New Year</option>
-        </select>
+        <select id="theme" name="theme" size="1" required>
+          <option value="default">Default</option>
+          <optgroup label="Celebrations">
+              <option value="christmas">Christmas</option>
+              <option value="newyear">New Year</option>
+              <option value="graduation">Graduation (Beta)</option>
+              <option value="engagement">Engagement (Beta)</option>
+              <option value="anniversary">Wedding Anniversary (Beta)</option>
+              <option value="birthday">Birthday (Beta)</option>
+              <option value="retirement">Retirement (Beta)</option>
+          </optgroup>
+          <optgroup label="Emotions">
+              <option value="lover">Lover (Beta)</option>
+              <option value="love">Love (Beta)</option>
+              <option value="sorry">Sorry (Beta)</option>
+              <option value="thankyou">Thank You (Beta)</option>
+              <option value="getwell">Get Well Soon (Beta)</option>
+              <option value="congratulations">Congratulations (Beta)</option>
+              <option value="goodluck">Good Luck (Beta)</option>
+          </optgroup>
+          <optgroup label="Other">
+              <option value="backtoschool">Back To School (Beta)</option>
+          </optgroup>
+      </select>      
     </div>
 <br>
       <div class="form-group">
@@ -126,6 +145,8 @@
         form.submit(); 
       }, 7500); 
     });
+
+    
   </script>
   <script src="/js/main.js"></script>
 </body>
