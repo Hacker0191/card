@@ -718,30 +718,30 @@ p {
     <div class="card-page cart-page-bottom">
       <div class="scrollable-content">
 
-        <p style="text-align: left;">From: <%= card.senderName %> (<%= card.senderCountry %>)</p>
-    <p style="text-align: left;">To: <%= card.receiverName %> (<%= card.receiverCountry %>)</p>
+        <p style="text-align: left;">From: <%= cardData.senderName %> (<%= cardData.senderCountry %>)</p>
+    <p style="text-align: left;">To: <%= cardData.receiverName %> (<%= cardData.receiverCountry %>)</p>
 
-          <p style="text-align: left;">Message: <%= card.message %></p>
+          <p style="text-align: left;">Message: <%= cardData.message %></p>
   
     
-        <% if (card.imageUrl) { %>
+        <% if (cardData.imageUrl) { %>
           <div class="attachment">
-            <img src="<%= card.imageUrl %>" alt="Card Image" class="card-image">
+            <img src="<%= cardData.imageUrl %>" alt="Card Image" class="card-image">
           </div>
         <% } %>
-        <% if (card.voiceNoteUrl) { %>
+        <% if (cardData.voiceNoteUrl) { %>
           <div class="attachment">
             <audio controls>
-              <source src="<%= card.voiceNoteUrl %>" type="audio/mpeg">
+              <source src="<%= cardData.voiceNoteUrl %>" type="audio/mpeg">
               Your browser does not support the audio element.
             </audio>
           </div>
         <% } %>
-        <% if (card.selectedSong && card.selectedSong.name && card.selectedSong.artist) { %>
+        <% if (cardData.selectedSong && cardData.selectedSong.name && cardData.selectedSong.artist) { %>
           <div class="attachment">
-            <p>Background Song: <%= card.selectedSong.name %> - <%= card.selectedSong.artist %></p>
+            <p>Background Song: <%= cardData.selectedSong.name %> - <%= cardData.selectedSong.artist %></p>
             <audio id="background-music" loop>
-              <source src="<%= card.selectedSong.url %>" type="audio/mpeg">
+              <source src="<%= cardData.selectedSong.url %>" type="audio/mpeg">
               Your browser does not support the audio element.
             </audio>
           </div>
