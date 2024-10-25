@@ -7,103 +7,115 @@
   <link rel="stylesheet" href="/css/style.css"> <link rel="stylesheet" href="/css/button.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Create Your Greeting Card</h1>
+  <div id="container">
+    <h1>&bull; Create Card &bull;</h1>
+    <div class="underline"></div>
+    
     <form id="greetingForm" action="/create-card" method="POST" enctype="multipart/form-data">
-      
-      <div class="form-group">
-        <label for="senderName">Sender's Name:</label>
-        <input type="text" id="senderName" name="senderName" required>
+      <!-- Sender's Name -->
+      <div class="name">
+        <label for="senderName"></label>
+        <input type="text" placeholder="Sender's Name" name="senderName" id="senderName" required>
       </div>
-
-      <div class="form-group">
-        <label for="senderCountry">Sender's Country:</label>
-        <input type="text" id="senderCountry" name="senderCountry" required>
+  
+      <!-- Sender's Country -->
+      <div class="email">
+        <label for="senderCountry"></label>
+        <input type="text" placeholder="Sender's Country" name="senderCountry" id="senderCountry" required>
       </div>
-
-      <div class="form-group">
-        <label for="receiverName">Receiver's Name:</label>
-        <input type="text" id="receiverName" name="receiverName" required>
+  
+      <!-- Receiver's Name -->
+      <div class="name">
+        <label for="receiverName"></label>
+        <input type="text" placeholder="Receiver's Name" name="receiverName" id="receiverName" required>
       </div>
-
-      <div class="form-group">
-        <label for="receiverCountry">Receiver's Country:</label>
-        <input type="text" id="receiverCountry" name="receiverCountry" required>
+  
+      <!-- Receiver's Country -->
+      <div class="email">
+        <label for="receiverCountry"></label>
+        <input type="text" placeholder="Receiver's Country" name="receiverCountry" id="receiverCountry" required>
       </div>
-
-      <div class="form-group">
-        <label for="deliveryDate">Delivery Date and Time:</label>
-        <input type="datetime-local" id="deliveryDate" name="deliveryDate" required>
+  
+      <!-- Delivery Date and Time -->
+      <div class="name">
+        <label for="deliveryDate"></label>
+        <input type="datetime-local" name="deliveryDate" id="deliveryDate" required>
       </div>
-
-      <div class="form-group">
-        <label for="message">Message:</label>
-        <textarea id="message" name="message" required></textarea>
+  
+      <!-- Message -->
+      <div class="message">
+        <label for="message"></label>
+        <textarea name="message" placeholder="Write your message" id="message" required maxlength="500"></textarea>
+        <div class="character-count">0/500 characters</div>
       </div>
-
-      <div class="form-group">
-        <label for="theme">Select Theme:</label>
+  
+      <!-- Select Theme -->
+      <div class="name">
+        <label for="theme"></label>
         <select id="theme" name="theme" size="1" required>
           <option value="default">Default</option>
           <optgroup label="Celebrations">
-              <option value="christmas">Christmas</option>
-              <option value="newyear">New Year</option>
-              <option value="graduation">Graduation (Beta)</option>
-              <option value="engagement">Engagement (Beta)</option>
-              <option value="anniversary">Wedding Anniversary (Beta)</option>
-              <option value="birthday">Birthday (Beta)</option>
-              <option value="retirement">Retirement (Beta)</option>
+            <option value="christmas">Christmas</option>
+            <option value="newyear">New Year</option>
+            <option value="graduation">Graduation</option>
+            <option value="engagement">Engagement</option>
+            <option value="anniversary">Wedding Anniversary</option>
+            <option value="birthday">Birthday</option>
+            <option value="retirement">Retirement</option>
           </optgroup>
           <optgroup label="Emotions">
-              <option value="lover">Lover (Beta)</option>
-              <option value="love">Love (Beta)</option>
-              <option value="sorry">Sorry (Beta)</option>
-              <option value="thankyou">Thank You (Beta)</option>
-              <option value="getwell">Get Well Soon (Beta)</option>
-              <option value="congratulations">Congratulations (Beta)</option>
-              <option value="goodluck">Good Luck (Beta)</option>
+            <option value="lover">Lover</option>
+            <option value="love">Love</option>
+            <option value="sorry">Sorry</option>
+            <option value="thankyou">Thank You</option>
+            <option value="getwell">Get Well Soon</option>
+            <option value="congratulations">Congratulations</option>
+            <option value="goodluck">Good Luck</option>
           </optgroup>
           <optgroup label="Other">
-              <option value="backtoschool">Back To School (Beta)</option>
+            <option value="backtoschool">Back To School</option>
           </optgroup>
-      </select>      
-    </div>
-<br>
-      <div class="form-group">
-        <label for="song">Background Song:</label>
+        </select>
+      </div>
+  
+      <!-- Background Song Search -->
+      <div class="name">
+        <label for="songSearch"></label>
         <input type="text" id="songSearch" placeholder="Search for a song">
         <div id="songResults"></div>
         <input type="hidden" id="selectedSong" name="selectedSong">
       </div>
-<br>
-      <div class="form-group">
-        <label for="image">Upload Image:</label>
+  
+      <!-- Image Upload -->
+      <div class="name">
+        <label for="image"></label>
         <input type="file" id="image" name="image" accept="image/*">
       </div>
-
-      <div class="form-group">
-        <label for="voiceNote">Upload Voice Note:</label>
-        <input type="file" id="voiceNote" name="voiceNote" accept="audio/*">
+  
+      <!-- Voice Note Upload -->
+      <div class="audio-recording">
+        <button type="button" id="recordButton" class="record-button">
+          Record Audio Message (Max 15s)
+        </button>
+        <div id="recordingStatus"></div>
+        <audio id="audioPreview" controls style="display: none;"></audio>
+        <input type="hidden" name="audioBlob" id="audioBlob">
       </div>
-<br>
-<div style="text-align: center;">
-      <button type="submit" id="submitBtn" class="order"><span class="default">Create Card</span><span class="success">Card Created<svg viewbox="0 0 12 10">
-        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-    </svg></span>
-<div class="box"></div>
-<div class="truck">
-    <div class="back"></div>
-    <div class="front">
-        <div class="window"></div>
-    </div>
-    <div class="light top"></div>
-    <div class="light bottom"></div>
+
+      <!-- Add video upload -->
+<div class="video-upload">
+  <label for="video"></label>
+  <input type="file" id="video" name="video" accept="video/*">
+  <div id="videoPreview"></div>
 </div>
-<div class="lines"></div>
-</button>
-</div>
+  
+      <!-- Submit Button -->
+      <div class="submit" style="text-align: center;">
+        <button type="submit" id="form_button">SUBMIT</button>
+      </div>
     </form>
   </div>
+  
 
   <script>
     // Song Search Script
@@ -134,19 +146,122 @@
         songResults.appendChild(div);
       });
     }
-
-    // Submit button delay
-    const form = document.getElementById('greetingForm');
-    const submitBtn = document.getElementById('submitBtn');
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();  
-      submitBtn.disabled = true;  
-      setTimeout(() => {
-        form.submit(); 
-      }, 7500); 
+  </script>
+  <script>
+    // Character count
+    const messageTextarea = document.getElementById('message');
+    const charCount = document.querySelector('.character-count');
+  
+    messageTextarea.addEventListener('input', function() {
+      const length = this.value.length;
+      charCount.textContent = `${length}/500 characters`;
     });
-
-    
+  
+    // Audio Recording
+    let mediaRecorder;
+    let audioChunks = [];
+    let recordingTimer;
+    const recordButton = document.getElementById('recordButton');
+    const recordingStatus = document.getElementById('recordingStatus');
+    const audioPreview = document.getElementById('audioPreview');
+    const audioBlobInput = document.getElementById('audioBlob');
+  
+    recordButton.addEventListener('click', async () => {
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        stopRecording();
+      } else {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          startRecording(stream);
+        } catch (err) {
+          console.error('Error accessing microphone:', err);
+          alert('Unable to access microphone');
+        }
+      }
+    });
+  
+    function startRecording(stream) {
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunks.push(event.data);
+      };
+  
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audioPreview.src = audioUrl;
+        audioPreview.style.display = 'block';
+        
+        // Convert blob to base64 for form submission
+        const reader = new FileReader();
+        reader.readAsDataURL(audioBlob);
+        reader.onloadend = () => {
+          audioBlobInput.value = reader.result;
+        };
+      };
+  
+      let seconds = 15;
+      recordingStatus.textContent = `Recording: ${seconds}s remaining`;
+      
+      recordingTimer = setInterval(() => {
+        seconds--;
+        recordingStatus.textContent = `Recording: ${seconds}s remaining`;
+        if (seconds <= 0) {
+          stopRecording();
+        }
+      }, 1000);
+  
+      mediaRecorder.start();
+      recordButton.textContent = 'Stop Recording';
+    }
+  
+    function stopRecording() {
+      mediaRecorder.stop();
+      clearInterval(recordingTimer);
+      recordButton.textContent = 'Record Audio Message (Max 15s)';
+      recordingStatus.textContent = '';
+      mediaRecorder.stream.getTracks().forEach(track => track.stop());
+    }
+  
+    // Video Upload Preview
+    const videoInput = document.getElementById('video');
+    const videoPreview = document.getElementById('videoPreview');
+  
+    videoInput.addEventListener('change', function(e) {
+      const file = this.files[0];
+      if (file) {
+        // Check file size (50MB limit)
+        if (file.size > 50 * 1024 * 1024) {
+          alert('Video must be under 50MB');
+          this.value = '';
+          return;
+        }
+  
+        // Check video duration
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+  
+        video.onloadedmetadata = function() {
+          window.URL.revokeObjectURL(video.src);
+          if (video.duration > 10) {
+            alert('Video must be 10 seconds or less');
+            videoInput.value = '';
+            videoPreview.innerHTML = '';
+          }
+        };
+  
+        video.src = URL.createObjectURL(file);
+  
+        // Show preview
+        videoPreview.innerHTML = `
+          <video controls style="max-width: 100%; margin-top: 10px;">
+            <source src="${URL.createObjectURL(file)}" type="${file.type}">
+          </video>
+        `;
+      }
+    });
   </script>
   <script src="/js/main.js"></script>
 </body>

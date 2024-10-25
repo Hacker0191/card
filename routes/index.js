@@ -110,9 +110,50 @@ router.get('/card/:cardId', async (req, res) => {
       case 'newyear':
         template = '3';
         break;
+      case 'graduation':
+        template = '7';
+        break;
+      case 'engagement':
+        template = '4';
+        break;
+      case 'anniversary':
+        template = '12';
+        break;
+      case 'birthday':
+        template = '16';
+        break;
+      case 'retirement':
+        template = '3';
+        break;
+      case 'lover':
+        template = '5';
+        break;
+      case 'love':
+        template = '13';
+        break;
+      case 'sorry':
+        template = '11';
+        break;
+      case 'thankyou':
+        template = '10';
+        break;
+      case 'getwell':
+        template = '6';
+        break;
+      case 'congratulations':
+        template = '9';
+        break;
+      case 'goodluck':
+        template = '8';
+        break;
+      case 'backtoschool':
+        template = '14';
+        break;
       default:
         template = '1';
     }
+    
+    
 
     res.render(`cards/${template}`, { cardData });
   } catch (error) {

@@ -41,15 +41,54 @@ app.get('/cards/:template/:cardId', async (req, res) => {
     
     // Determine which template to use
     let templateFile;
-    switch (template) {
-      case '2':
-        templateFile = 'cards/2.ejs'; // Christmas theme
+    switch (cardData.theme) {
+      case 'christmas':
+        template = '2';
         break;
-      case '3':
-        templateFile = 'cards/3.ejs'; // New Year theme
+      case 'newyear':
+        template = '3';
+        break;
+      case 'graduation':
+        template = '7';
+        break;
+      case 'engagement':
+        template = '4';
+        break;
+      case 'anniversary':
+        template = '12';
+        break;
+      case 'birthday':
+        template = '16';
+        break;
+      case 'retirement':
+        template = '3';
+        break;
+      case 'lover':
+        template = '5';
+        break;
+      case 'love':
+        template = '13';
+        break;
+      case 'sorry':
+        template = '11';
+        break;
+      case 'thankyou':
+        template = '10';
+        break;
+      case 'getwell':
+        template = '6';
+        break;
+      case 'congratulations':
+        template = '9';
+        break;
+      case 'goodluck':
+        template = '8';
+        break;
+      case 'backtoschool':
+        template = '14';
         break;
       default:
-        templateFile = 'cards/1.ejs'; // Default theme
+        template = '1';
     }
     
     // Render the appropriate template with the card data

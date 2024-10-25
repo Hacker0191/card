@@ -4,11 +4,23 @@
   <meta charset="UTF-8">
   <title>Christmas Greeting Card</title>
   <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=no; target-densityDpi=device-dpi" />
-  <link rel="stylesheet" href="/css/1.css">
+  <link rel="stylesheet" href="/css/card.css">
   <style>
     @import url("https://fonts.googleapis.com/css?family=Mirza&amp;subset=latin-ext");
 * {
   box-sizing: border-box;
+}
+
+.fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 9999 !important;
+    background: white !important;
+    margin: 0 !important;
+    overflow-y: auto !important;
 }
 
 body {
@@ -715,40 +727,73 @@ p {
           </span>
         </div>
     </div>
-    <div class="card-page cart-page-bottom">
+    <div class="card-page cart-page-bottom" onclick="toggleFullscreen(this)">
       <div class="scrollable-content">
-
-        <p style="text-align: left;">From: <%= cardData.senderName %> (<%= cardData.senderCountry %>)</p>
-    <p style="text-align: left;">To: <%= cardData.receiverName %> (<%= cardData.receiverCountry %>)</p>
-
+          <p style="text-align: left;">From: <%= cardData.senderName %> (<%= cardData.senderCountry %>)</p>
+          <p style="text-align: left;">To: <%= cardData.receiverName %> (<%= cardData.receiverCountry %>)</p>
           <p style="text-align: left;">Message: <%= cardData.message %></p>
-  
-    
-        <% if (cardData.imageUrl) { %>
+          <% if (cardData.imageUrl) { %>
           <div class="attachment">
-            <img src="<%= cardData.imageUrl %>" alt="Card Image" class="card-image">
+              <img src="<%= cardData.imageUrl %>" alt="Card Image" class="card-image">
           </div>
-        <% } %>
-        <% if (cardData.voiceNoteUrl) { %>
+          <% } %>
+          <% if (cardData.voiceNoteUrl) { %>
           <div class="attachment">
-            <audio controls>
-              <source src="<%= cardData.voiceNoteUrl %>" type="audio/mpeg">
-              Your browser does not support the audio element.
-            </audio>
+              <audio controls>
+                  <source src="<%= cardData.voiceNoteUrl %>" type="audio/mpeg">
+                  Your browser does not support the audio element.
+              </audio>
           </div>
-        <% } %>
-        <% if (cardData.selectedSong && cardData.selectedSong.name && cardData.selectedSong.artist) { %>
+          <% } %>
+          <% if (cardData.selectedSong && cardData.selectedSong.name && cardData.selectedSong.artist) { %>
           <div class="attachment">
-            <p>Background Song: <%= cardData.selectedSong.name %> - <%= cardData.selectedSong.artist %></p>
-            <audio id="background-music" loop>
-              <source src="<%= cardData.selectedSong.url %>" type="audio/mpeg">
-              Your browser does not support the audio element.
-            </audio>
+              <p>Background Song: <%= cardData.selectedSong.name %> - <%= cardData.selectedSong.artist %></p>
+              <audio id="background-music" loop>
+                  <source src="<%= cardData.selectedSong.url %>" type="audio/mpeg">
+                  Your browser does not support the audio element.
+              </audio>
           </div>
-        <% } %>  
-       
-      </div>      
+          <% } %>
+  <!-- Add this after your existing card content -->
+  <div class="card-interactions">
+    <!-- Emoji Reactions Section -->
+    <div class="reactions-section">
+      <div class="current-reactions" id="reactionsContainer">
+        <!-- Reactions will be populated here -->
+      </div>
+      <div class="add-reaction">
+        <button onclick="toggleEmojiPicker()" class="emoji-button">Add Reaction</button>
+        <div id="emojiPicker" class="emoji-picker" style="display: none;">
+          <div class="emoji-grid">
+            <!-- Common emojis -->
+            <button onclick="addReaction('❤️')" class="emoji">❤️</button>
+            <button onclick="addReaction('👍')" class="emoji">👍</button>
+            <button onclick="addReaction('😊')" class="emoji">😊</button>
+            <button onclick="addReaction('🎉')" class="emoji">🎉</button>
+            <button onclick="addReaction('👏')" class="emoji">👏</button>
+            <button onclick="addReaction('🙏')" class="emoji">🙏</button>
+          </div>
+        </div>
+      </div>
     </div>
+  
+    <!-- Replies Section -->
+    <div class="replies-section">
+      <h3>Replies</h3>
+      <div id="repliesContainer">
+        <!-- Replies will be populated here -->
+      </div>
+      <div class="reply-form">
+        <input type="text" id="replyUserName" placeholder="Your name" class="reply-input">
+        <textarea id="replyMessage" placeholder="Write a reply..." class="reply-input"></textarea>
+        <button onclick="submitReply()" class="reply-button">Send Reply</button>
+      </div>
+    </div>
+  </div>
+          
+      </div>
+      
+  </div>
   </div>
 
   <span class="click-icon">
@@ -816,6 +861,6 @@ p {
     }
   });
 </script>
-
+<script src="/js/card.js"></script>
 </body>
 </html>

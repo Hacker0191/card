@@ -5,7 +5,36 @@
   <title>Card Tracking Page </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/track.css">
-
+  
+  <style>
+    .undo-container {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    
+    .undo-button {
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    
+    .countdown-timer {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    </style>
 </head>
 <body>
 
@@ -15,6 +44,14 @@
     <div class="header">
       <div class="order-summary">
         <div class="order-status">Arriving date</div>
+        <% if (trackingData.canUndo) { %>
+          <div class="undo-container">
+            <div class="countdown-timer" id="undoTimer"></div>
+            <button onclick="undoSend('<%= trackingData.id %>')" class="undo-button">
+              Undo Send
+            </button>
+          </div>
+        <% } %>
         <div class="order-date">
         <%= new Date(trackingData.deliveryDate.seconds * 1000).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
         </div>
@@ -149,6 +186,55 @@
     }
   }
   </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script>
+    // Undo functionality
+    function undoSend(cardId) {
+      fetch(`/tracking/${cardId}/undo`, {
+        method: 'POST',
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Card has been cancelled');
+          window.location.href = '/';
+        } else {
+          alert('Unable to undo. Time limit expired.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while trying to undo');
+      });
+    }
+  
+    // Countdown timer for undo window
+    if (document.querySelector('.countdown-timer')) {
+      let timeLeft = 10;
+      const timerElement = document.querySelector('.countdown-timer');
+      
+      const countdownInterval = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = `Undo available for ${timeLeft} seconds`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          document.querySelector('.undo-container').remove();
+        }
+      }, 1000);
+    }
+  
+    // Fix timezone issues
+    function adjustTimezone(date) {
+      const localDate = new Date(date);
+      return localDate.toLocaleString();
+    }
+  
+    // Update all date displays
+    document.querySelectorAll('.date-display').forEach(element => {
+      const timestamp = element.getAttribute('data-timestamp');
+      element.textContent = adjustTimezone(timestamp);
+    });
+  </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </body>
 </html>

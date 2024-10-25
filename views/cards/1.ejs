@@ -113,6 +113,7 @@ h1 {
 
 
   </style>
+<link rel="stylesheet" href="/css/card.css">
 </head>
 <body>
 
@@ -146,8 +147,44 @@ h1 {
         </audio>
       </div>
     <% } %>  
-   
   </div>
+
+  <!-- Add this after your existing card content -->
+<div class="card-interactions">
+  <!-- Emoji Reactions Section -->
+  <div class="reactions-section">
+    <div class="current-reactions" id="reactionsContainer">
+      <!-- Reactions will be populated here -->
+    </div>
+    <div class="add-reaction">
+      <button onclick="toggleEmojiPicker()" class="emoji-button">Add Reaction</button>
+      <div id="emojiPicker" class="emoji-picker" style="display: none;">
+        <div class="emoji-grid">
+          <!-- Common emojis -->
+          <button onclick="addReaction('❤️')" class="emoji">❤️</button>
+          <button onclick="addReaction('👍')" class="emoji">👍</button>
+          <button onclick="addReaction('😊')" class="emoji">😊</button>
+          <button onclick="addReaction('🎉')" class="emoji">🎉</button>
+          <button onclick="addReaction('👏')" class="emoji">👏</button>
+          <button onclick="addReaction('🙏')" class="emoji">🙏</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Replies Section -->
+  <div class="replies-section">
+    <h3>Replies</h3>
+    <div id="repliesContainer">
+      <!-- Replies will be populated here -->
+    </div>
+    <div class="reply-form">
+      <input type="text" id="replyUserName" placeholder="Your name" class="reply-input">
+      <textarea id="replyMessage" placeholder="Write a reply..." class="reply-input"></textarea>
+      <button onclick="submitReply()" class="reply-button">Send Reply</button>
+    </div>
+  </div>
+</div>
 
   <script>
     const audio = document.getElementById('background-music');
@@ -161,6 +198,6 @@ h1 {
       }
     });
   </script>
-  
+ <script src="/js/card.js"></script>
 </body>
 </html>

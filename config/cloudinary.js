@@ -11,8 +11,8 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'greetingCards',
-    allowed_formats: ['jpg', 'png', 'mp3', 'wav'],
-    resource_type: 'auto'
+    allowed_formats: ['jpg', 'png', 'mp3', 'wav', 'mp4', 'mov', 'avi'], 
+    resource_type: 'auto' 
   }
 });
 
