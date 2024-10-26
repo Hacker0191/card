@@ -13,6 +13,10 @@ const fs = require('fs').promises;
 const os = require('os');
 const path = require('path');
 
+router.get('/', (req, res) => {
+  res.render('index');
+});
+
 // Utility function to compress image
 async function compressImage(file) {
   const tempOutput = path.join(os.tmpdir(), `compressed-${file.filename}`);
