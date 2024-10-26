@@ -19,7 +19,6 @@ router.get('/', (req, res) => {
 
 router.post('/create-card', upload.fields([
   { name: 'image', maxCount: 2 },
-  { name: 'video', maxCount: 1 },
   { name: 'voiceNote', maxCount: 1 }
 ]), async (req, res) => {
   try {
@@ -38,39 +37,14 @@ router.post('/create-card', upload.fields([
     const createdAt = admin.firestore.Timestamp.now();
     const deliveryTimestamp = admin.firestore.Timestamp.fromDate(new Date(deliveryDate));
 
-    let imageUrl, videoUrl, voiceNoteUrl;
+    let imageUrl, voiceNoteUrl;
 
-    // Process and compress image if uploaded
     if (req.files['image']) {
-      const compressedImagePath = await compressImage(req.files['image'][0]);
-      const uploadResult = await cloudinary.uploader.upload(compressedImagePath, {
-        quality: 'auto:low', // Additional Cloudinary compression
-        fetch_format: 'auto'
-      });
-      imageUrl = uploadResult.secure_url;
-      await fs.unlink(compressedImagePath); // Clean up temp file
+      imageUrl = req.files['image'][0].path;
     }
 
-    // Process and compress video if uploaded
-    if (req.files['video']) {
-      const compressedVideoPath = await compressVideo(req.files['video'][0]);
-      const uploadResult = await cloudinary.uploader.upload(compressedVideoPath, {
-        resource_type: 'video',
-        quality: 'auto:low' // Additional Cloudinary compression
-      });
-      videoUrl = uploadResult.secure_url;
-      await fs.unlink(compressedVideoPath); // Clean up temp file
-    }
-
-    // Process and compress voice note if uploaded
     if (req.files['voiceNote']) {
-      const compressedAudioPath = await compressAudio(req.files['voiceNote'][0]);
-      const uploadResult = await cloudinary.uploader.upload(compressedAudioPath, {
-        resource_type: 'video',
-        quality: 'auto:low' // Additional Cloudinary compression
-      });
-      voiceNoteUrl = uploadResult.secure_url;
-      await fs.unlink(compressedAudioPath); // Clean up temp file
+      voiceNoteUrl = req.files['voiceNote'][0].path;
     }
 
     let parsedSong;
@@ -93,19 +67,11 @@ router.post('/create-card', upload.fields([
       deliveryDate: deliveryTimestamp,
       status: 'Preparing for dispatch',
       imageUrl: imageUrl || null,
-      videoUrl: videoUrl || null,
       voiceNoteUrl: voiceNoteUrl || null,
       theme
     };
 
     await admin.firestore().collection('cards').doc(cardId).set(cardData, { merge: true });
-
-    // Clean up original uploaded files
-    for (const fileArray of Object.values(req.files)) {
-      for (const file of fileArray) {
-        await fs.unlink(file.path);
-      }
-    }
 
     // Redirect to the tracking page
     res.redirect(`/tracking/${cardId}`);
