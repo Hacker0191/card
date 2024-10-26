@@ -17,61 +17,6 @@ router.get('/', (req, res) => {
   res.render('index');
 });
 
-// Utility function to compress image
-async function compressImage(file) {
-  const tempOutput = path.join(os.tmpdir(), `compressed-${file.filename}`);
-  await sharp(file.path)
-    .jpeg({ quality: 80 }) // Compress JPEG to 80% quality
-    .png({ compressionLevel: 8 }) // Compress PNG with level 8 compression
-    .resize(1920, 1080, { 
-      fit: 'inside',
-      withoutEnlargement: true
-    })
-    .toFile(tempOutput);
-  
-  return tempOutput;
-}
-
-// Utility function to compress video
-async function compressVideo(file) {
-  const tempOutput = path.join(os.tmpdir(), `compressed-${file.filename}`);
-  
-  return new Promise((resolve, reject) => {
-    ffmpeg(file.path)
-      .outputOptions([
-        '-c:v libx264',     // Use H.264 codec
-        '-crf 28',          // Compression quality (23-28 is good balance)
-        '-preset faster',    // Encoding speed preset
-        '-c:a aac',         // Audio codec
-        '-b:a 128k',        // Audio bitrate
-        '-movflags +faststart',
-        '-y'
-      ])
-      .output(tempOutput)
-      .on('end', () => resolve(tempOutput))
-      .on('error', (err) => reject(err))
-      .run();
-  });
-}
-
-// Utility function to compress audio
-async function compressAudio(file) {
-  const tempOutput = path.join(os.tmpdir(), `compressed-${file.filename}`);
-  
-  return new Promise((resolve, reject) => {
-    ffmpeg(file.path)
-      .outputOptions([
-        '-c:a libmp3lame',  // Use MP3 codec
-        '-b:a 128k',        // Audio bitrate
-        '-y'
-      ])
-      .output(tempOutput)
-      .on('end', () => resolve(tempOutput))
-      .on('error', (err) => reject(err))
-      .run();
-  });
-}
-
 router.post('/create-card', upload.fields([
   { name: 'image', maxCount: 2 },
   { name: 'video', maxCount: 1 },
