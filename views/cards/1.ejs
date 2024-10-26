@@ -138,66 +138,253 @@ h1 {
         </audio>
       </div>
     <% } %>
-    <% if (cardData.selectedSong && cardData.selectedSong.name && cardData.selectedSong.artist) { %>
-      <div class="attachment">
-        <p>Background Song: <%= cardData.selectedSong.name %> - <%= cardData.selectedSong.artist %></p>
-        <audio id="background-music" loop>
-          <source src="<%= cardData.selectedSong.url %>" type="audio/mpeg">
+    <% if (cardData.selectedSong) { %>
+      <div class="music-player">
+        <h3>Background Music</h3>
+        <p><%= cardData.selectedSong.name %> - <%= cardData.selectedSong.artist %></p>
+        <audio id="background-music">
+          <source src="<%= cardData.selectedSong.previewUrl %>" type="audio/mpeg">
           Your browser does not support the audio element.
         </audio>
+    
+        <div class="audio-controls">
+          <button id="playPauseBtn" class="control-btn">
+            <i class="fas fa-play"></i>
+          </button>
+          <button id="muteBtn" class="control-btn">
+            <i class="fas fa-volume-up"></i>
+          </button>
+        </div>
       </div>
-    <% } %>  
+    <% } %>
   </div>
 
   <!-- Add this after your existing card content -->
-<div class="card-interactions">
-  <!-- Emoji Reactions Section -->
-  <div class="reactions-section">
-    <div class="current-reactions" id="reactionsContainer">
-      <!-- Reactions will be populated here -->
-    </div>
-    <div class="add-reaction">
-      <button onclick="toggleEmojiPicker()" class="emoji-button">Add Reaction</button>
-      <div id="emojiPicker" class="emoji-picker" style="display: none;">
-        <div class="emoji-grid">
-          <!-- Common emojis -->
-          <button onclick="addReaction('❤️')" class="emoji">❤️</button>
-          <button onclick="addReaction('👍')" class="emoji">👍</button>
-          <button onclick="addReaction('😊')" class="emoji">😊</button>
-          <button onclick="addReaction('🎉')" class="emoji">🎉</button>
-          <button onclick="addReaction('👏')" class="emoji">👏</button>
-          <button onclick="addReaction('🙏')" class="emoji">🙏</button>
+  <div class="card-interactions">
+    <!-- Emoji Reactions Section -->
+    <div class="reactions-section">
+      <div class="current-reactions" id="reactionsContainer">
+        <!-- Reactions will be populated here -->
+      </div>
+      <div class="add-reaction">
+        <button onclick="toggleEmojiPicker()" class="emoji-button">Add Reaction</button>
+        <div id="emojiPicker" class="emoji-picker">
+          <div class="emoji-grid">
+            <!-- Common emojis -->
+            <button onclick="addReaction('❤️')" class="emoji">❤️</button>
+            <button onclick="addReaction('👍')" class="emoji">👍</button>
+            <button onclick="addReaction('😊')" class="emoji">😊</button>
+            <button onclick="addReaction('🎉')" class="emoji">🎉</button>
+            <button onclick="addReaction('👏')" class="emoji">👏</button>
+            <button onclick="addReaction('🙏')" class="emoji">🙏</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Replies Section -->
-  <div class="replies-section">
-    <h3>Replies</h3>
-    <div id="repliesContainer">
-      <!-- Replies will be populated here -->
+  
+    <!-- Replies Section -->
+    <div class="replies-section">
+      <h3>Replies</h3>
+      <div id="repliesContainer">
+        <!-- Replies will be populated here -->
+      </div>
+      <div class="reply-form">
+        <input type="text" id="replyUserName" placeholder="Your name" class="reply-input">
+        <textarea id="replyMessage" placeholder="Write a reply..." class="reply-input"></textarea>
+        <button onclick="submitReply()" class="reply-button">Send Reply</button>
+      </div>
     </div>
-    <div class="reply-form">
-      <input type="text" id="replyUserName" placeholder="Your name" class="reply-input">
-      <textarea id="replyMessage" placeholder="Write a reply..." class="reply-input"></textarea>
-      <button onclick="submitReply()" class="reply-button">Send Reply</button>
-    </div>
   </div>
-</div>
+  
+  
+  
 
-  <script>
-    const audio = document.getElementById('background-music');
+<script>
+  const audio = document.getElementById('background-music');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const muteBtn = document.getElementById('muteBtn');
+  let isPlaying = false;
 
-    // Add a click event listener to the document to play the audio when the user interacts with the page
-    document.addEventListener('click', () => {
-      if (audio) {
-        audio.play().catch(error => {
-          console.log("Audio play failed: ", error);
-        });
+  // Play/Pause functionality
+  playPauseBtn.addEventListener('click', () => {
+    if (isPlaying) {
+      audio.pause();
+      playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    } else {
+      audio.play().catch(error => {
+        console.log("Audio play failed:", error);
+      });
+      playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    }
+    isPlaying = !isPlaying;
+  });
+
+  // Mute functionality
+  muteBtn.addEventListener('click', () => {
+    audio.muted = !audio.muted;
+    muteBtn.innerHTML = audio.muted ? 
+      '<i class="fas fa-volume-mute"></i>' : 
+      '<i class="fas fa-volume-up"></i>';
+  });
+
+  // Update play button when audio ends
+  audio.addEventListener('ended', () => {
+    isPlaying = false;
+    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+  });
+
+  // Auto-play only after user interaction
+  document.addEventListener('click', () => {
+    if (!isPlaying && audio) {
+      audio.play().catch(error => {
+        console.log("Audio play failed:", error);
+      });
+      isPlaying = true;
+      playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    }
+  }, { once: true });
+</script>
+<script>
+  const cardId = '<%= cardData.id %>';
+  
+  // Fetch and display reactions
+  async function fetchReactions() {
+    try {
+      const response = await fetch(`/card/${cardId}/reactions`);
+      const reactions = await response.json();
+      const container = document.getElementById('reactionsContainer');
+      container.innerHTML = '';
+      
+      Object.entries(reactions).forEach(([emoji, users]) => {
+        const div = document.createElement('div');
+        div.className = 'reaction-item';
+        div.innerHTML = `${emoji} ${users.length}`;
+        container.appendChild(div);
+      });
+    } catch (error) {
+      console.error('Error fetching reactions:', error);
+    }
+  }
+  
+  // Add reaction
+  async function addReaction(emoji) {
+    const userName = prompt('Enter your name:');
+    if (!userName) return;
+  
+    try {
+      await fetch(`/card/${cardId}/reactions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emoji, userName })
+      });
+      
+      fetchReactions();
+      toggleEmojiPicker();
+    } catch (error) {
+      console.error('Error adding reaction:', error);
+    }
+  }
+  
+  // Toggle emoji picker
+  function toggleEmojiPicker() {
+    const picker = document.getElementById('emojiPicker');
+    picker.style.display = picker.style.display === 'none' ? 'block' : 'none';
+  }
+  
+  // Fetch and display replies
+  async function fetchReplies() {
+    try {
+      const response = await fetch(`/card/${cardId}/replies`);
+      const replies = await response.json();
+      const container = document.getElementById('repliesContainer');
+      container.innerHTML = '';
+      
+      replies.forEach(reply => {
+        const div = document.createElement('div');
+        div.className = 'reply-item';
+        div.innerHTML = `
+          <strong>${reply.userName}</strong>
+          <p>${reply.message}</p>
+          <small>${new Date(reply.timestamp?.seconds * 1000).toLocaleString()}</small>
+        `;
+        container.appendChild(div);
+      });
+    } catch (error) {
+      console.error('Error fetching replies:', error);
+    }
+  }
+  
+  // Submit reply
+  async function submitReply() {
+    const userName = document.getElementById('replyUserName').value;
+    const message = document.getElementById('replyMessage').value;
+    
+    if (!userName || !message) {
+      alert('Please enter both your name and message');
+      return;
+    }
+  
+    try {
+      await fetch(`/card/${cardId}/replies`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName, message })
+      });
+      
+      document.getElementById('replyUserName').value = '';
+      document.getElementById('replyMessage').value = '';
+      fetchReplies();
+    } catch (error) {
+      console.error('Error submitting reply:', error);
+    }
+  }
+  
+  // Initial load
+  fetchReactions();
+  fetchReplies();
+  
+  // Refresh data periodically
+  setInterval(fetchReactions, 10000);
+  setInterval(fetchReplies, 10000);
+
+  function toggleFullscreen(element) {
+      if (!document.fullscreenElement) {
+          // Enter fullscreen
+          if (element.requestFullscreen) {
+              element.requestFullscreen();
+          } else if (element.webkitRequestFullscreen) { /* Safari */
+              element.webkitRequestFullscreen();
+          } else if (element.msRequestFullscreen) { /* IE11 */
+              element.msRequestFullscreen();
+          }
+      } else {
+          // Exit fullscreen
+          if (document.exitFullscreen) {
+              document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) { /* Safari */
+              document.webkitExitFullscreen();
+          } else if (document.msExitFullscreen) { /* IE11 */
+              document.msExitFullscreen();
+          }
       }
-    });
-  </script>
- <script src="/js/card.js"></script>
+  }
+  
+  // Optional: Handle fullscreen change
+  document.addEventListener('fullscreenchange', function() {
+      const element = document.querySelector('.card-page');
+      if (document.fullscreenElement) {
+          element.style.backgroundColor = 'white';
+          element.style.overflow = 'auto';
+          element.style.padding = '20px';
+          element.style.height = '100%';
+      } else {
+          element.style.backgroundColor = '';
+          element.style.overflow = '';
+          element.style.padding = '';
+          element.style.height = '';
+      }
+  });
+</script>
+
 </body>
 </html>

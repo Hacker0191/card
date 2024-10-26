@@ -1,34 +1,8 @@
+// routes/tracking.js
 const express = require('express');
 const router = express.Router();
 const admin = require('../config/firebase');
 
-// Add this new route for handling undo
-router.post('/:id/undo', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const cardDoc = await admin.firestore().collection('cards').doc(id).get();
-    
-    if (!cardDoc.exists) {
-      return res.status(404).json({ success: false, message: 'Card not found' });
-    }
-
-    const cardData = cardDoc.data();
-    
-    if (!cardData.canUndo || cardData.undoExpiresAt.toDate() < new Date()) {
-      return res.status(400).json({ success: false, message: 'Undo period expired' });
-    }
-
-    // Delete the card
-    await admin.firestore().collection('cards').doc(id).delete();
-    
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Error undoing card:', error);
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-// Update the existing route to handle timezone correctly
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   
@@ -43,10 +17,19 @@ router.get('/:id', async (req, res) => {
     const now = admin.firestore.Timestamp.now();
     
     // Calculate progress based on UTC times
-    const totalTime = cardData.deliveryDate.toDate().getTime() - cardData.createdAt.toDate().getTime();
-    const elapsedTime = now.toDate().getTime() - cardData.createdAt.toDate().getTime();
-    const progress = Math.min(Math.max((elapsedTime / totalTime) * 100, 0), 100);
-
+    const createdAtDate = cardData.createdAt.toDate();
+    const deliveryDate = cardData.deliveryDate.toDate();
+    const currentDate = now.toDate();
+    
+    // Calculate total duration and elapsed time in milliseconds
+    const totalDuration = deliveryDate.getTime() - createdAtDate.getTime();
+    const elapsedTime = currentDate.getTime() - createdAtDate.getTime();
+    
+    // Calculate progress percentage
+    let progress = Math.min(Math.max((elapsedTime / totalDuration) * 100, 0), 100);
+    progress = Math.round(progress); // Round to nearest integer
+    
+    // Determine status based on progress
     let status;
     if (progress < 25) {
       status = 'Preparing for dispatch';
@@ -58,18 +41,35 @@ router.get('/:id', async (req, res) => {
       status = 'Delivered';
     }
 
-    await admin.firestore().collection('cards').doc(id).update({ status });
+    // Update status in Firestore
+    await admin.firestore().collection('cards').doc(id).update({
+      status,
+      progress
+    });
+
+    // Format delivery date and time for display
+    const formattedDeliveryDate = deliveryDate.toLocaleString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZoneName: 'short'
+    });
 
     res.render('tracking', {
       trackingData: {
         ...cardData,
         status,
-        progress: Math.round(progress),
+        progress,
+        formattedDeliveryDate,
+        id
       }
     });
   } catch (error) {
-    console.error('Error fetching card for tracking:', error);
-    res.status(500).send('An error occurred while fetching the card tracking information');
+    console.error('Error fetching card:', error);
+    res.status(500).send('An error occurred while fetching the card');
   }
 });
 

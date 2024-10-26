@@ -5,6 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Greeting Card Website</title>
   <link rel="stylesheet" href="/css/style.css"> <link rel="stylesheet" href="/css/button.css">
+  <style>
+    .song-result {
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin: 5px 0;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    
+    .song-result:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .song-result img {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+    
+    .song-preview {
+      margin-left: auto;
+    }
+    
+    #songResults {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-top: none;
+      display: none;
+    }
+    
+    #songResults.show {
+      display: block;
+    }
+    </style>
 </head>
 <body>
   <div id="container">
@@ -37,115 +73,178 @@
       </div>
   
       <!-- Delivery Date and Time -->
-      <div class="name">
-        <label for="deliveryDate"></label>
-        <input type="datetime-local" name="deliveryDate" id="deliveryDate" required>
+      <div class="name" style="margin-bottom: 20px;">
+        <label for="deliveryDate">DATE:</label>
+        <input type="datetime-local" name="deliveryDate" id="deliveryDate" style="margin-top: 10px;" required>
       </div>
-  
+   
+       
       <!-- Message -->
-      <div class="message">
+      <div class="message" style="margin-bottom: 20px;">
         <label for="message"></label>
-        <textarea name="message" placeholder="Write your message" id="message" required maxlength="500"></textarea>
-        <div class="character-count">0/500 characters</div>
+        <textarea name="message" placeholder="Write your message" id="message" required></textarea>
+        <div class="character-count" style="margin-top: -25px;">0 characters</div>
       </div>
   
       <!-- Select Theme -->
-      <div class="name">
+      <div class="message">
         <label for="theme"></label>
         <select id="theme" name="theme" size="1" required>
           <option value="default">Default</option>
           <optgroup label="Celebrations">
-            <option value="christmas">Christmas</option>
-            <option value="newyear">New Year</option>
-            <option value="graduation">Graduation</option>
-            <option value="engagement">Engagement</option>
-            <option value="anniversary">Wedding Anniversary</option>
-            <option value="birthday">Birthday</option>
-            <option value="retirement">Retirement</option>
+            <option value="christmas">Christmas (Beta)</option>
+            <option value="newyear">New Year (Beta)</option>
+            <option value="graduation">Graduation (Beta)</option>
+            <option value="engagement">Engagement (Beta)</option>
+            <option value="anniversary">Wedding Anniversary (Beta)</option>
+            <option value="birthday">Birthday (Beta)</option>
+            <option value="retirement">Retirement (Beta)</option>
           </optgroup>
           <optgroup label="Emotions">
-            <option value="lover">Lover</option>
-            <option value="love">Love</option>
-            <option value="sorry">Sorry</option>
-            <option value="thankyou">Thank You</option>
-            <option value="getwell">Get Well Soon</option>
-            <option value="congratulations">Congratulations</option>
-            <option value="goodluck">Good Luck</option>
+            <option value="lover">Lover (Beta)</option>
+            <option value="love">Love (Beta)</option>
+            <option value="sorry">Sorry (Beta)</option>
+            <option value="thankyou">Thank You (Beta)</option>
+            <option value="getwell">Get Well Soon (Beta)</option>
+            <option value="congratulations">Congratulations (Beta)</option>
+            <option value="goodluck">Good Luck (Beta)</option>
           </optgroup>
           <optgroup label="Other">
-            <option value="backtoschool">Back To School</option>
+            <option value="backtoschool">Back To School (Beta)</option>
           </optgroup>
         </select>
       </div>
   
-      <!-- Background Song Search -->
-      <div class="name">
-        <label for="songSearch"></label>
-        <input type="text" id="songSearch" placeholder="Search for a song">
-        <div id="songResults"></div>
-        <input type="hidden" id="selectedSong" name="selectedSong">
-      </div>
+     <!-- Update the song search section in your form -->
+<div class="message">
+  <label for="songSearch"></label>
+  <input type="text" id="songSearch" placeholder="Search for a song">
+  <div id="songResults"></div>
+  <input type="hidden" id="selectedSong" name="selectedSong">
   
-      <!-- Image Upload -->
-      <div class="name">
-        <label for="image"></label>
-        <input type="file" id="image" name="image" accept="image/*">
-      </div>
-  
-      <!-- Voice Note Upload -->
-      <div class="audio-recording">
-        <button type="button" id="recordButton" class="record-button">
-          Record Audio Message (Max 15s)
-        </button>
-        <div id="recordingStatus"></div>
-        <audio id="audioPreview" controls style="display: none;"></audio>
-        <input type="hidden" name="audioBlob" id="audioBlob">
-      </div>
-
-      <!-- Add video upload -->
-<div class="video-upload">
-  <label for="video"></label>
-  <input type="file" id="video" name="video" accept="video/*">
-  <div id="videoPreview"></div>
+  <!-- Preview section -->
+  <div id="selectedSongPreview" style="display: none; margin-bottom: 20px;">
+    <div class="selected-song-info"></div>
+    <audio id="previewAudio" controls></audio>
+  </div>
 </div>
   
+    <!-- Toggle Button -->
+<button type="button" id="toggleUploadButton">Show Upload Options &nbsp; <i class="fa-solid fa-chevron-down"></i></button>
+
+<!-- Upload Options Container -->
+<div id="uploadOptions" class="upload-options" style="display: none;">
+  <!-- Image Upload -->
+  <div class="message">
+    <label for="image">Upload Image:</label>
+    <input type="file" id="image" name="image" accept="image/*">
+  </div>
+
+  <!-- Voice Note Upload -->
+  <div class="audio-recording">
+    <label for="audio">Record Audio:</label><br>
+    <button type="button" id="recordButton" class="record-button" style="margin-top: 10px;">
+      <i class="fas fa-microphone"></i> Record Audio Note (Max 15s)
+    </button>
+    <div id="recordingStatus"></div>
+    <audio id="audioPreview" controls style="display: none;"></audio>
+    <input type="hidden" name="audioBlob" id="audioBlob">
+  </div>
+
+  <!-- Video Upload -->
+  <div class="video-upload">
+    <label for="video">Upload Video:</label>
+    <input type="file" id="video" name="video" accept="video/*">
+    <div id="videoPreview"></div>
+  </div>
+</div>
+
+  
       <!-- Submit Button -->
-      <div class="submit" style="text-align: center;">
-        <button type="submit" id="form_button">SUBMIT</button>
+      <div class="submit" style="text-align: center; margin-top: 30px;">
+        <button type="submit" id="form_button">CREATE CARD</button>
       </div>
     </form>
   </div>
   
 
-  <script>
-    // Song Search Script
-    const songSearch = document.getElementById('songSearch');
-    const songResults = document.getElementById('songResults');
-    const selectedSong = document.getElementById('selectedSong');
+ 
+<script>
+  let debounceTimeout;
+  const songSearch = document.getElementById('songSearch');
+  const songResults = document.getElementById('songResults');
+  const selectedSong = document.getElementById('selectedSong');
+  const selectedSongPreview = document.getElementById('selectedSongPreview');
+  const previewAudio = document.getElementById('previewAudio');
   
-    songSearch.addEventListener('input', async (e) => {
-      const query = e.target.value;
-      if (query.length > 2) {
-        const response = await fetch(`/search-song?query=${encodeURIComponent(query)}`);
-        const data = await response.json();
-        displaySongResults(data.results.trackmatches.track);
-      }
-    });
-  
-    function displaySongResults(tracks) {
+  songSearch.addEventListener('input', (e) => {
+    clearTimeout(debounceTimeout);
+    const query = e.target.value;
+    
+    if (query.length > 2) {
+      debounceTimeout = setTimeout(async () => {
+        try {
+          const response = await fetch(`/search-song?query=${encodeURIComponent(query)}`);
+          const data = await response.json();
+          
+          if (data.error) {
+            console.error('Search error:', data.error);
+            return;
+          }
+          
+          displaySongResults(data.tracks);
+        } catch (error) {
+          console.error('Error searching songs:', error);
+        }
+      }, 300);
+    } else {
       songResults.innerHTML = '';
+      songResults.classList.remove('show');
+    }
+  });
+  
+  function displaySongResults(tracks) {
+    songResults.innerHTML = '';
+    
+    if (tracks && tracks.length > 0) {
       tracks.forEach(track => {
         const div = document.createElement('div');
-        div.classList.add('song-item');
-        div.textContent = `${track.name} - ${track.artist}`;
+        div.className = 'song-result';
+        div.innerHTML = `
+          <img src="${track.albumArt || '/placeholder-album.png'}" alt="${track.name}">
+          <div>
+            <div><strong>${track.name}</strong></div>
+            <div>${track.artist}</div>
+          </div>
+          <button class="song-preview">Preview</button>
+        `;
+        
         div.addEventListener('click', () => {
           selectedSong.value = JSON.stringify(track);
           songSearch.value = `${track.name} - ${track.artist}`;
-          songResults.innerHTML = '';
+          songResults.classList.remove('show');
+          
+          // Update preview section
+          selectedSongPreview.style.display = 'block';
+          selectedSongPreview.querySelector('.selected-song-info').innerHTML = `
+            <p>Selected: ${track.name} - ${track.artist}</p>
+          `;
+          previewAudio.src = track.previewUrl;
         });
+        
         songResults.appendChild(div);
       });
+      
+      songResults.classList.add('show');
     }
+  }
+  
+  // Close results when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.name')) {
+      songResults.classList.remove('show');
+    }
+  });
   </script>
   <script>
     // Character count
@@ -154,7 +253,7 @@
   
     messageTextarea.addEventListener('input', function() {
       const length = this.value.length;
-      charCount.textContent = `${length}/500 characters`;
+      charCount.textContent = `${length} characters`;
     });
   
     // Audio Recording
@@ -262,7 +361,24 @@
         `;
       }
     });
+
+    const deliveryDateInput = document.getElementById('deliveryDate');
+  
+  // Get the current date and time in the correct format (YYYY-MM-DDTHH:MM)
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
+  // Set the min attribute to disable past dates
+  const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+  deliveryDateInput.min = minDateTime;
   </script>
+
   <script src="/js/main.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </body>
 </html>

@@ -1,65 +1,51 @@
-const orderButton = document.querySelector(".order");
-
-const addRemoveClass = () => {
-  if (!orderButton.classList.contains("animate")) {
-    orderButton.classList.add("animate");
-    setTimeout(() => {
-      orderButton.classList.remove("animate");
-    }, 100000);
-  }
-};
-
-orderButton.addEventListener("click", addRemoveClass);
-
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('greetingForm');
+  const form = document.getElementById('greetingForm');
+
+  // Save form data to localStorage
+  function saveFormData() {
+    const formData = {
+      senderName: document.getElementById('senderName').value,
+      senderCountry: document.getElementById('senderCountry').value,
+      receiverName: document.getElementById('receiverName').value,
+      receiverCountry: document.getElementById('receiverCountry').value,
+      deliveryDate: document.getElementById('deliveryDate').value,
+      message: document.getElementById('message').value,
+      theme: document.getElementById('theme').value,
+      selectedSong: document.getElementById('selectedSong').value
+    };
     
-    // Save form data to localStorage
-    function saveFormData() {
-      const formData = {
-        senderName: document.getElementById('senderName').value,
-        senderCountry: document.getElementById('senderCountry').value,
-        receiverName: document.getElementById('receiverName').value,
-        receiverCountry: document.getElementById('receiverCountry').value,
-        deliveryDate: document.getElementById('deliveryDate').value,
-        message: document.getElementById('message').value,
-        theme: document.getElementById('theme').value,
-        selectedSong: document.getElementById('selectedSong').value
-      };
-      
-      localStorage.setItem('greetingFormDraft', JSON.stringify(formData));
+    localStorage.setItem('greetingFormDraft', JSON.stringify(formData));
+  }
+
+  // Load saved form data from localStorage
+  function loadFormData() {
+    const savedData = localStorage.getItem('greetingFormDraft');
+    if (savedData) {
+      const formData = JSON.parse(savedData);
+      document.getElementById('senderName').value = formData.senderName || '';
+      document.getElementById('senderCountry').value = formData.senderCountry || '';
+      document.getElementById('receiverName').value = formData.receiverName || '';
+      document.getElementById('receiverCountry').value = formData.receiverCountry || '';
+      document.getElementById('deliveryDate').value = formData.deliveryDate || '';
+      document.getElementById('message').value = formData.message || '';
+      document.getElementById('theme').value = formData.theme || 'default';
+      document.getElementById('selectedSong').value = formData.selectedSong || '';
     }
+  }
 
-    // Load saved form data from localStorage
-    function loadFormData() {
-      const savedData = localStorage.getItem('greetingFormDraft');
-      if (savedData) {
-        const formData = JSON.parse(savedData);
-        document.getElementById('senderName').value = formData.senderName || '';
-        document.getElementById('senderCountry').value = formData.senderCountry || '';
-        document.getElementById('receiverName').value = formData.receiverName || '';
-        document.getElementById('receiverCountry').value = formData.receiverCountry || '';
-        document.getElementById('deliveryDate').value = formData.deliveryDate || '';
-        document.getElementById('message').value = formData.message || '';
-        document.getElementById('theme').value = formData.theme || 'default';
-        document.getElementById('selectedSong').value = formData.selectedSong || '';
-      }
-    }
-
-    // Clear saved form data when form is submitted
-    form.addEventListener('submit', function () {
-      localStorage.removeItem('greetingFormDraft');
-    });
-
-    // Save data when any input changes
-    form.addEventListener('input', saveFormData);
-
-    // Load the saved data when the page loads
-    loadFormData();
+  // Clear saved form data when form is submitted
+  form.addEventListener('submit', function () {
+    localStorage.removeItem('greetingFormDraft');
   });
 
+  // Save data when any input changes
+  form.addEventListener('input', saveFormData);
 
-  // List of all country names
+  // Load the saved data when the page loads
+  loadFormData();
+});
+
+// Autocomplete script
 const countries = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", 
   "Antigua and Barbuda", "Argentina", "Armenia", "Australia", 
@@ -103,10 +89,12 @@ const countries = [
   "Vietnam", "Yemen", "Zambia", "Zimbabwe"
 ];
 
+document.addEventListener('DOMContentLoaded', function() {
 const inputFields = ['senderCountry', 'receiverCountry'];
+
 inputFields.forEach(fieldId => {
   const inputField = document.getElementById(fieldId);
-  const resultsContainer = document.createElement('div'); // Container to show suggestions
+  const resultsContainer = document.createElement('div');
   resultsContainer.classList.add('autocomplete-results');
   inputField.parentNode.appendChild(resultsContainer);
 
@@ -143,4 +131,18 @@ inputFields.forEach(fieldId => {
     }
   });
 });
+});
 
+document.getElementById("toggleUploadButton").addEventListener("click", function() {
+  const uploadOptions = document.getElementById("uploadOptions");
+  const isVisible = uploadOptions.style.display === "block";
+  
+  // Toggle visibility
+  if (isVisible) {
+    uploadOptions.style.display = "none";
+    this.innerText = "Show Upload Options";
+  } else {
+    uploadOptions.style.display = "block";
+    this.innerText = 'Hide Upload Options';
+  }
+});

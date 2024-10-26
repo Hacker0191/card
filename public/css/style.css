@@ -192,7 +192,7 @@ textarea {
 
 @media screen and (max-width: 480px) {
   h1 {
-    font-size: 26px;
+    font-size: 30px;
   }
   
   .underline {
@@ -206,7 +206,7 @@ textarea {
 
 @media screen and (max-width: 420px) {
   h1 {
-    font-size: 18px;
+    font-size: 24px;
   }
   
   .icon {
@@ -224,7 +224,7 @@ textarea {
 }
 
 
-/* Styling for the results container */
+/* Base styling for the results container */
 .autocomplete-results {
   background-color: #fff;
   max-height: 200px; /* Limit the height */
@@ -234,17 +234,151 @@ textarea {
   z-index: 1000;
   border-radius: 5px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  left: 0; /* Align to the left */
 }
 
 /* Styling for each suggestion item */
 .autocomplete-item {
   padding: 10px;
   cursor: pointer;
+  transition: background-color 0.2s; /* Smooth background transition */
 }
 
 .autocomplete-item:hover {
   background-color: #f0f0f0; /* Highlight on hover */
 }
 
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .autocomplete-results {
+    width: calc(100% - 16px); /* Adjust for smaller screens */
+    max-height: 150px; /* Reduce height on smaller screens */
+  }
+}
+
+@media (min-width: 601px) and (max-width: 768px) {
+  .autocomplete-results {
+    width: calc(100% - 20px); /* Slightly larger padding for tablets */
+    max-height: 180px; /* Adjust height for tablets */
+  }
+}
+
+@media (min-width: 769px) {
+  .autocomplete-results {
+    width: calc(100% - 22px); /* Default width for larger screens */
+    max-height: 200px; /* Default height for larger screens */
+  }
+}
 
 
+
+
+/* Image Upload Styling */
+#image {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%; /* Full width for responsiveness */
+  box-sizing: border-box; /* Include padding and border in width */
+}
+
+/* Voice Note Upload Styling */
+.audio-recording {
+  margin: 20px 0;
+  text-align: left; /* Center align the button and audio preview */
+}
+
+.record-button {
+  color: #333; /* Dark text for contrast */
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex; /* Use flexbox to align icon and text */
+  align-items: left;
+  justify-content: left;
+  transition: background-color 0.3s ease;
+  margin: 0 auto; /* Center the button */
+}
+
+.record-button:hover {
+  background-color: black; /* Slightly darker beige on hover */
+  color: white;
+}
+
+/* Icon in the button */
+.record-button i {
+  margin-right: 8px; /* Space between icon and text */
+}
+
+/* Recording status styling */
+#recordingStatus {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Audio preview styling */
+#audioPreview {
+  margin-top: 10px;
+  display: block;
+}
+
+/* Video Upload Styling */
+.video-upload {
+  margin: 20px 0;
+}
+
+#video {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%; /* Full width for responsiveness */
+  box-sizing: border-box; /* Include padding and border in width */
+}
+
+#videoPreview {
+  margin-top: 10px;
+}
+
+.upload-options {
+  display: none; /* Initially hidden */
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px; /* Rounded corners */
+  background-color: #f9f9f9; /* Light background for visibility */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  transition: max-height 0.3s ease-out; /* Smooth transition */
+  animation: fadeIn 0.5s ease-in; /* Animation on reveal */
+}
+
+
+#toggleUploadButton {
+  background-color: #000; /* Black background */
+  color: #fff; /* White text */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Slightly rounded corners */
+  padding: 10px 15px; /* Add some padding */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+}
+
+/* Hover effect */
+#toggleUploadButton:hover {
+  background-color: #333; /* Darker shade on hover */
+}
+
+/* Focus effect for accessibility */
+#toggleUploadButton:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5); /* Custom focus effect */
+}
