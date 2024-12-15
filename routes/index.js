@@ -6,12 +6,12 @@ const admin = require('../config/firebase');
 const multer = require('multer');
 const { cloudinary, storage } = require('../config/cloudinary');
 const upload = multer({ storage });
-const SpotifyWebApi = require('spotify-web-api-node');
 const sharp = require('sharp');
 const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs').promises;
 const os = require('os');
 const path = require('path');
+const YouTubeMusic = require('youtube-music-api');
 
 router.get('/', (req, res) => {
   res.render('index');
@@ -152,46 +152,56 @@ router.get('/card/:cardId', async (req, res) => {
 });
 
 
-// Initialize Spotify API client
-const spotifyApi = new SpotifyWebApi({
-  clientId: process.env.SPOTIFY_CLIENT_ID,
-  clientSecret: process.env.SPOTIFY_CLIENT_SECRET
-});
 
-// Refresh Spotify access token
-async function refreshSpotifyToken() {
+
+// Initialize YouTube Music API
+const ytMusic = new YouTubeMusic();
+
+// Middleware to initialize YouTube Music API
+async function initYouTubeMusic(req, res, next) {
   try {
-    const data = await spotifyApi.clientCredentialsGrant();
-    spotifyApi.setAccessToken(data.body.access_token);
-    console.log('Spotify access token refreshed');
+    await ytMusic.initialize();
+    next();
   } catch (error) {
-    console.error('Error refreshing Spotify token:', error);
+    console.error('YouTube Music API Initialization Error:', error);
+    res.status(500).json({ error: 'Failed to initialize YouTube Music API' });
   }
 }
 
-// Refresh token every hour
-setInterval(refreshSpotifyToken, 3600000);
-refreshSpotifyToken(); // Initial token refresh
-
+// YouTube Music search route
 router.get('/search-song', async (req, res) => {
   const { query } = req.query;
   
+  if (!query) {
+    return res.status(400).json({ error: 'Search query is required' });
+  }
+  
   try {
-    const searchResults = await spotifyApi.searchTracks(query, {
-      limit: 10
+    // Search YouTube for music tracks
+    const searchResponse = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+      params: {
+        part: 'snippet',
+        q: `${query} music`,
+        type: 'video',
+        key: process.env.YOUTUBE_API_KEY,
+        maxResults: 10,
+        videoCategoryId: '10' // Music category
+      }
     });
 
-    const tracks = searchResults.body.tracks.items.map(track => ({
-      name: track.name,
-      artist: track.artists[0].name,
-      previewUrl: track.preview_url, // 30-second preview URL
-      albumArt: track.album.images[0]?.url,
-      spotifyId: track.id
-    })).filter(track => track.previewUrl); // Only return tracks with preview URLs
+    // Process tracks
+    const tracks = searchResponse.data.items.map(item => ({
+      name: item.snippet.title,
+      artist: item.snippet.channelTitle,
+      albumArt: item.snippet.thumbnails.high.url,
+      youtubeId: item.id.videoId,
+      externalUrl: `https://www.youtube.com/watch?v=${item.id.videoId}`
+    }));
 
+    console.log('Tracks found:', tracks);
     res.json({ tracks });
   } catch (error) {
-    console.error('Error searching for songs:', error);
+    console.error('Error searching for songs:', error.response ? error.response.data : error.message);
     res.status(500).json({ 
       error: 'An error occurred while searching for songs',
       details: error.message 

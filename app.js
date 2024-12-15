@@ -6,6 +6,9 @@ const admin = require('./config/firebase'); // Add this line to import Firebase 
 
 const app = express();
 
+
+
+
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
